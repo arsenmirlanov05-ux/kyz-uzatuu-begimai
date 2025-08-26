@@ -209,6 +209,27 @@
     .bgm-toggle:hover{ transform:translateY(-1px) }
     .bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
     .bgm-toggle .icon{ line-height:1 }
+    /* Мобильный тюнинг: больше зазор между кнопками */
+@media (max-width: 420px){
+  .hero .panel{
+    padding-bottom: 120px; /* +место под плавающую кнопку */
+  }
+  .bgm-toggle{
+    width:52px; height:52px;
+    right: calc(56px + env(safe-area-inset-right, 0px)); /* ещё левее на ~15px */
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px));/* ещё выше на ~20px */
+  }
+}
+
+/* Совсем узкие экраны */
+@media (max-width: 340px){
+  .bgm-toggle{
+    width:48px; height:48px;
+    right: calc(64px + env(safe-area-inset-right, 0px));
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
   </style>
 </head>
 <body>
