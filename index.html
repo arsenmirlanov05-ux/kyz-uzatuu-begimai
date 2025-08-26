@@ -14,6 +14,11 @@
       --bg:#ffffff; --fg:#1a1a1a; --muted:#6b6b6b;
       --accent:#7a1e2c; --accent-2:#a02a3d;
       --line:#ececec; --shadow:0 10px 30px rgba(122,30,44,.12);
+
+      /* reveal */
+      --reveal-dur:.7s;
+      --reveal-ease:cubic-bezier(.22,1,.36,1);
+      --reveal-distance:24px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -83,6 +88,17 @@
     .mark .txt{ font-size:14px; color:var(--fg) }
     @media (max-width:600px){ .mark .txt{font-size:13px} }
 
+    /* Точка-бегунок поверх всего */
+    .runner-dot{
+      position:absolute; left:0; top:0;
+      width:14px; height:14px; border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 4px #fff, 0 6px 18px rgba(122,30,44,.35);
+      transform:translate(-50%,-50%);
+      z-index:5;               /* выше .mark и фото */
+      pointer-events:none;
+    }
+
     /* Карусель / marquee общие */
     .carousel{overflow:auto; display:flex; gap:12px; scroll-snap-type:x mandatory; padding:6px 0; -ms-overflow-style:none; scrollbar-width:none}
     .carousel::-webkit-scrollbar{display:none}
@@ -116,53 +132,30 @@
     /* ===== ЛОКАЦИЯ ===== */
     .section.location{margin-top:clamp(80px,10vw,150px); text-align:center}
     .loc-title{color:var(--accent); text-transform:uppercase; letter-spacing:.14em; margin:0 0 40px}
-    .loc-card{max-width:980px; margin:0 auto; padding:0; background:transparent; border:0; box-shadow:none}
+    .loc-card{max-width:980px; margin:0 auto; padding:0; background:transparent; border:0; box-shadow:none; display:grid; place-items:center; text-align:center}
     .loc-venue{font:700 clamp(20px,4vw,26px) 'Playfair Display',serif; line-height:1.32; margin:0 0 12px}
     .loc-venue .accent{color:var(--accent)}
     .loc-address{color:var(--muted); font-size:clamp(15px,2.6vw,19px); line-height:1.5; margin:0 0 24px}
-    .loc-photo{margin:0 0 26px; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#f3f3f3}
-    .loc-photo img{width:100%; height:100%; object-fit:cover; display:block}
+    .loc-photo{margin:0 0 26px; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#f3f3f3; max-width:min(980px,96%); display:block}
+    .loc-photo img{width:100%; height:100%; object-fit:cover; object-position:center center}
     .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04em; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
     .loc-btn:hover{transform:translateY(-1px); background:var(--accent-2)}
     .loc-btn:active{transform:translateY(0); box-shadow:0 6px 12px rgba(122,30,44,.18)}
 
     /* Пожелание */
     .wish{max-width:900px; margin:40px auto 0; padding:0 16px; text-align:center}
-    .wish-card{
-      background:#fff; border:1px solid var(--line); border-radius:22px;
-      padding:34px 26px; box-shadow:0 24px 70px rgba(122,30,44,.10);
-    }
-    .wish-title{
-      font:700 clamp(22px,4.2vw,30px) 'Playfair Display',serif;
-      color:var(--accent); margin:0 0 10px;
-    }
-    .wish-text{
-      font:italic 600 clamp(18px,3.6vw,22px) 'Playfair Display',serif;
-      color:#2a2a2a; line-height:1.55; margin:0 auto; max-width:720px;
-    }
-    .wish-divider{
-      height:1px; width:140px; margin:16px auto;
-      background:linear-gradient(90deg,transparent,var(--accent),transparent); opacity:.6;
-    }
+    .wish-card{ background:#fff; border:1px solid var(--line); border-radius:22px; padding:34px 26px; box-shadow:0 24px 70px rgba(122,30,44,.10); }
+    .wish-title{ font:700 clamp(22px,4.2vw,30px) 'Playfair Display',serif; color:var(--accent); margin:0 0 10px; }
+    .wish-text{ font:italic 600 clamp(18px,3.6vw,22px) 'Playfair Display',serif; color:#2a2a2a; line-height:1.55; margin:0 auto; max-width:720px; }
+    .wish-divider{ height:1px; width:140px; margin:16px auto; background:linear-gradient(90deg,transparent,var(--accent),transparent); opacity:.6; }
     .wish-sign{color:var(--muted); font-weight:600; letter-spacing:.02em}
 
-    /* Фото-футер (как шапка), на весь экран + отступ сверху 60px */
+    /* Фото-футер (как шапка) */
     .footer-hero{
-      padding:0;
-      margin-top:60px;
-      min-height:100svh;
-      position:relative;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      overflow:hidden;
-      color:#333;
+      padding:0; margin-top:60px; min-height:100svh; position:relative;
+      display:grid; place-items:center; text-align:center; overflow:hidden; color:#333;
     }
-    .footer-img{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
-    }
+    .footer-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
     .footer-hero::after{
       content:""; position:absolute; inset:0;
       background:
@@ -174,17 +167,9 @@
     .footer-title{  font:700 clamp(28px,5.6vw,44px) 'Playfair Display',serif; margin:10px 0 6px }
     .footer-names{  font:700 clamp(30px,6.4vw,50px) 'Playfair Display',serif; color:var(--accent); margin-top:8px }
     .legal{ position:relative; z-index:1; text-align:center; color:var(--muted); padding:16px }
-
-    @media (max-width: 640px){
-      .footer-hero{ margin-top:40px; }
-    }
+    @media (max-width: 640px){ .footer-hero{ margin-top:40px; } }
 
     /* ================== SCROLL-REVEAL ================== */
-    :root{
-      --reveal-dur:.7s;
-      --reveal-ease:cubic-bezier(.22,1,.36,1);
-      --reveal-distance:24px;
-    }
     .reveal{
       opacity:0;
       transform:translateY(var(--reveal-distance));
@@ -203,18 +188,23 @@
     @media (prefers-reduced-motion: reduce){
       .reveal,.reveal.in{ opacity:1; transform:none; filter:none; transition:none }
     }
-    /* Кнопка музыки */
-.bgm-toggle{
-  position:fixed; right:16px; bottom:16px; z-index:9999;
-  width:46px; height:46px; border-radius:999px;
-  display:grid; place-items:center; cursor:pointer;
-  border:1px solid #a02a3d; background:linear-gradient(180deg,#7a1e2c,#a02a3d);
-  color:#fff; font-weight:700; box-shadow:0 10px 20px rgba(122,30,44,.25);
-}
-.bgm-toggle:hover{ transform:translateY(-1px) }
-.bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
-.bgm-toggle .icon{ font-size:18px; line-height:1 }
 
+    /* Кнопка музыки (всегда видима, safe-area, без зума) */
+    .bgm-toggle{
+      position:fixed;
+      right:calc(16px + env(safe-area-inset-right, 0px));
+      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+      z-index:9999;
+      width:56px; height:56px; border-radius:999px;
+      display:grid; place-items:center; cursor:pointer;
+      border:1px solid #a02a3d; background:linear-gradient(180deg,#7a1e2c,#a02a3d);
+      color:#fff; font-weight:700; font-size:16px; /* чтобы iOS не зумил */
+      box-shadow:0 10px 20px rgba(122,30,44,.25);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .bgm-toggle:hover{ transform:translateY(-1px) }
+    .bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
+    .bgm-toggle .icon{ line-height:1 }
   </style>
 </head>
 <body>
@@ -266,6 +256,9 @@
         <circle class="ring-base" cx="100" cy="100" r="80"/>
         <g class="runner" id="runner" style="transform:translate(100px,20px)"><circle cx="0" cy="0"/></g>
       </svg>
+      <!-- новая точка поверх всего -->
+      <div id="runnerDot" class="runner-dot" aria-hidden="true"></div>
+
       <div class="mark" data-hour="12"><div class="badge-time">12:00</div><div class="txt">Welcome & фото</div></div>
       <div class="mark" data-hour="13"><div class="badge-time">13:00</div><div class="txt">Открытие торжества</div></div>
       <div class="mark" data-hour="14"><div class="badge-time">14:00</div><div class="txt">Дастархан (обед)</div></div>
@@ -285,7 +278,7 @@
         <div class="loc-venue">Banket Hall <span class="accent">«Талас»</span></div>
         <div class="loc-address">Талас, Улица Чынгыза Айтматова, 246</div>
       </div>
-      <div class="loc-photo"><img src="restik.jpg" alt="Зал ресторана «Кепи»" loading="lazy"></div>
+      <div class="loc-photo"><img src="restik.jpg" alt="Зал ресторана «Талас»" loading="lazy"></div>
       <a class="loc-btn" href="https://go.2gis.com/M5tjs" target="_blank" rel="noopener">ПОСМОТРЕТЬ НА КАРТЕ</a>
     </div>
   </section>
@@ -358,16 +351,15 @@
     </div>
     <div class="legal">© <span id="y"></span>. С любовью, семья.</div>
   </footer>
-<!-- Фоновая музыка -->
-<audio id="bgm" preload="auto" loop playsinline>
-  <source src="lamour.mp3" type="audio/mpeg">
-  <!-- <source src="music/begimai.ogg" type="audio/ogg"> -->
-</audio>
 
-<!-- Тоггл-кнопка -->
-<button class="bgm-toggle" id="bgmToggle" aria-pressed="false" aria-label="Включить музыку">
-  <span class="icon">♫</span>
-</button>
+  <!-- Фоновая музыка -->
+  <audio id="bgm" preload="auto" loop playsinline>
+    <source src="lamour.mp3" type="audio/mpeg">
+  </audio>
+  <!-- Тоггл-кнопка -->
+  <button class="bgm-toggle" id="bgmToggle" aria-pressed="false" aria-label="Включить музыку">
+    <span class="icon">♫</span>
+  </button>
 
 <script>
 /* ========= НАСТРОЙКИ ========= */
@@ -435,10 +427,11 @@ function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
 })();
 
 /* ========= АНИМАЦИЯ «РАСПИСАНИЕ» ========= */
-const runSchedule = (()=> {
+const runSchedule = (()=>{
   const clock  = document.getElementById('clock');
   if(!clock) return async()=>{};
-  const runner = document.getElementById('runner');
+  const runnerSvg = document.getElementById('runner');
+  const runnerDot = document.getElementById('runnerDot'); // новая точка поверх
   const marks  = Array.from(clock.querySelectorAll('.mark'));
   const phA = document.getElementById('phA');
   const phB = document.getElementById('phB');
@@ -466,8 +459,14 @@ const runSchedule = (()=> {
     });
   }
   function moveRunner(hour){
-    const a=ang(hour); const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
-    runner.style.transform=`translate(${x}px,${y}px)`;
+    const a=ang(hour);
+    const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+    if (runnerDot){
+      runnerDot.style.left = (x/200*100) + '%';
+      runnerDot.style.top  = (y/200*100) + '%';
+    } else if (runnerSvg){
+      runnerSvg.style.transform=`translate(${x}px,${y}px)`;
+    }
   }
   let useA=false;
   function swapPhoto(hour){
@@ -485,7 +484,6 @@ const runSchedule = (()=> {
   }
   reset(); addEventListener('resize', placeMarks);
 
-  // запускаем с возможностью отмены (signal)
   return async ({stepMs=SCHEDULE_STEP_MS, pauseMs=SCHEDULE_PAUSE_MS, signal}={})=>{
     reset();
     for (let i=0;i<seq.length;i++){
@@ -523,65 +521,46 @@ const runSchedule = (()=> {
   }
 
   async function startJourney(){
-    // если уже едем — это «стоп»
     if (journeyCtrl) { stopJourney(); return; }
-
     journeyCtrl = new AbortController();
     const signal = journeyCtrl.signal;
     unbindUser = bindUserCancel();
     btn.setAttribute('aria-busy','true');
 
     const bottomY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    // целимся в ЦЕНТР секции расписания
     const r = schedule.getBoundingClientRect();
     const scheduleCenterY = (window.scrollY||window.pageYOffset) + r.top + r.height/2 - window.innerHeight/2;
 
     try{
-      // едем до расписания
       await scrollToYConstant({toY: scheduleCenterY, signal});
-
-      // стоп на расписании — проигрываем анимацию
       await runSchedule({signal});
-
-      // и дальше — до низа
       await scrollToYConstant({toY: bottomY, signal});
-    }catch(_){ /* aborted by user — норм*/ }
-    finally{
-      stopJourney(); // снимаем флаги/слушатели
-    }
+    }catch(_){} finally{ stopJourney(); }
   }
 
   btn.addEventListener('click', (e)=>{ e.preventDefault(); startJourney(); });
 
-  // Обновляем год в футере
   const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
 })();
-</script>
-<script>
-/* ===== Scroll-reveal (чисто анимация появления) ===== */
+
+/* ===== Scroll-reveal ===== */
 (function(){
-  if (window.__revealInit) return; // защита от повторной инициализации
+  if (window.__revealInit) return;
   window.__revealInit = true;
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   const io = new IntersectionObserver((entries)=>{
     for (const e of entries){
-      if (e.isIntersecting){
-        e.target.classList.add('in');  // запускаем анимацию
-        io.unobserve(e.target);        // один раз на элемент
-      }
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     }
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
   function addReveal(selector, extra){
     document.querySelectorAll(selector).forEach(el=>{
-      el.classList.add('reveal');
-      if (extra) el.classList.add(extra);
+      el.classList.add('reveal'); if (extra) el.classList.add(extra);
       if (reduce) el.classList.add('in'); else io.observe(el);
     });
   }
-
   function makeStagger(selector){
     document.querySelectorAll(selector).forEach(group=>{
       group.classList.add('stagger');
@@ -593,32 +572,27 @@ const runSchedule = (()=> {
     });
   }
 
-  /* какие элементы плавно показываем */
-  addReveal('header .panel');          // шапка
-  makeStagger('header .meta');         // бейджи в шапке
-  makeStagger('.countdown');           // таймер
-  addReveal('.section .h2');           // заголовки секций
-  addReveal('.section .lead');         // подзаголовки/лиды
-  addReveal('.calendar .cal');         // календарь
-  addReveal('#schedule .clock');       // круг-расписание
-  addReveal('.marquee');               // бегущая галерея
+  addReveal('header .panel');
+  makeStagger('header .meta');
+  makeStagger('.countdown');
+  addReveal('.section .h2');
+  addReveal('.section .lead');
+  addReveal('.calendar .cal');
+  addReveal('#schedule .clock');
+  addReveal('.marquee');
   addReveal('.loc-card .loc-photo','left');
   addReveal('.loc-card .loc-text','right');
   addReveal('.loc-btn');
-  addReveal('.wish-card');             // карточка пожелания
-  addReveal('footer.footer-hero .panel'); // контент футера
+  addReveal('.wish-card');
+  addReveal('footer.footer-hero .panel');
 
-  /* на всякий случай — при возврате из bfcache */
   window.addEventListener('pageshow', (e)=>{
     if (e.persisted){
-      requestAnimationFrame(()=>{
-        document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
-      });
+      requestAnimationFrame(()=>{ document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el)); });
     }
   });
 })();
-</script>
-<script>
+
 /* ===== РУЧНОЙ СТАРТ ЧАСОВ ПРИ ПРОКРУТКЕ ===== */
 (function(){
   const clock = document.querySelector('#schedule .clock');
@@ -627,30 +601,23 @@ const runSchedule = (()=> {
   const btn = document.getElementById('scrollBtn');
   const isAutoRunning = () => btn && btn.getAttribute('aria-busy') === 'true';
 
-  let playing = false;   // сейчас проигрываем вручную
-  let played  = false;   // уже запускали вручную (чтобы не дублировать)
+  let playing = false;
+  let played  = false;
 
   async function startOnce(){
     if (played || playing || isAutoRunning()) return;
     playing = true;
-    try{
-      await runSchedule();   // твоя существующая анимация расписания
-      played = true;
-    }catch(_){ /* ignore */ }
+    try{ await runSchedule(); played = true; }catch(_){}
     finally{ playing = false; }
   }
 
-  // Запуск, когда блок реально в фокусе (≈ по центру экрана)
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
-      if (e.isIntersecting && e.intersectionRatio >= 0.55){
-        startOnce();
-      }
+      if (e.isIntersecting && e.intersectionRatio >= 0.55){ startOnce(); }
     });
   }, { threshold:[0,0.25,0.5,0.75,1], rootMargin:'0px 0px -8% 0px' });
   io.observe(clock);
 
-  // Фолбэк: если пользователь крутит/тач — проверяем «нахождение в центре»
   ['wheel','touchstart','keydown'].forEach(ev=>{
     addEventListener(ev, ()=>{
       if (isAutoRunning()) return;
@@ -660,7 +627,6 @@ const runSchedule = (()=> {
     }, {passive:true});
   });
 
-  // На случай возврата из bfcache (Safari/IOS)
   addEventListener('pageshow', e=>{
     if (e.persisted){
       setTimeout(()=>{
@@ -671,19 +637,17 @@ const runSchedule = (()=> {
     }
   });
 })();
-</script>
-<script>
+
+/* ===== Музыка ===== */
 (function(){
   const audio = document.getElementById('bgm');
   const btn   = document.getElementById('bgmToggle');
   if(!audio || !btn) return;
 
-  // начальная громкость и сохранённое состояние
   audio.volume = 0.6;
   const saved = localStorage.getItem('bgmOn');
-  let wantOn  = saved ? JSON.parse(saved) : true; // по умолчанию включать после жеста
+  let wantOn  = saved ? JSON.parse(saved) : true;
 
-  // оформление кнопки
   function setBtn(on){
     btn.classList.toggle('on', on);
     btn.setAttribute('aria-pressed', on);
@@ -692,7 +656,6 @@ const runSchedule = (()=> {
   }
   setBtn(false);
 
-  // плавный фейд
   function fadeTo(volTarget=1, ms=300){
     const steps = 20, from = audio.volume, delta = (volTarget - from)/steps;
     let i=0; const t = setInterval(()=>{ i++; audio.volume = Math.min(1, Math.max(0, from + delta*i));
@@ -706,10 +669,7 @@ const runSchedule = (()=> {
       await audio.play();
       setBtn(true);
       localStorage.setItem('bgmOn','true');
-    }catch(e){
-      // автоплей заблокирован — просто ждём жест
-      setBtn(false);
-    }
+    }catch(e){ setBtn(false); }
   }
   function pause(){
     audio.pause();
@@ -717,10 +677,8 @@ const runSchedule = (()=> {
     localStorage.setItem('bgmOn','false');
   }
 
-  // Клик по кнопке
   btn.addEventListener('click', async ()=>{
     if (audio.paused){
-      // начинаем без мьюта, с плавным фейдом
       audio.muted = false;
       await play(true);
       fadeTo(0.6, 300);
@@ -730,10 +688,9 @@ const runSchedule = (()=> {
     }
   });
 
-  // Политика автоплея: запускаем ТИШЕ (muted), а при первом жесте включаем звук
   audio.muted = true;
   if (wantOn){
-    audio.play().catch(()=>{}); // тихий старт, может быть заблокирован — не страшно
+    audio.play().catch(()=>{});
     const unlock = async ()=>{
       off();
       audio.muted = false;
@@ -742,11 +699,10 @@ const runSchedule = (()=> {
       localStorage.setItem('bgmOn','true');
     };
     const on  = (ev)=> window.addEventListener(ev, unlock, {once:true, passive:true});
-    const off = ()=> ['click','touchend','pointerup','keydown'].forEach(ev=>window.removeEventListener(ev, unlock, {passive:true}));
+    var off = ()=> ['click','touchend','pointerup','keydown'].forEach(ev=>window.removeEventListener(ev, unlock, {passive:true}));
     ['click','touchend','pointerup','keydown'].forEach(on);
   }
 
-  // Если у тебя есть кнопка «Пролистать», тоже используем её как жест
   const scrollBtn = document.getElementById('scrollBtn');
   if (scrollBtn){
     scrollBtn.addEventListener('click', ()=>{
@@ -756,7 +712,5 @@ const runSchedule = (()=> {
   }
 })();
 </script>
-
-
 </body>
 </html>
