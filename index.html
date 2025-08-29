@@ -670,7 +670,59 @@ const runSchedule = (()=> {
     ['click','touchend','pointerup','keydown'].forEach(on);
   }
 })();
+
+  <script>
+/* Ручной старт часов при ручном скролле */
+(function(){
+  const clock = document.querySelector('#schedule .clock');
+  if (!clock || typeof runSchedule !== 'function') return;
+
+  const btn = document.getElementById('scrollBtn');
+  const isAutoRunning = () => btn && btn.getAttribute('aria-busy') === 'true';
+
+  let playing = false;
+  let played  = false;
+
+  async function startOnce(){
+    if (played || playing || isAutoRunning()) return;
+    playing = true;
+    try { await runSchedule(); played = true; } catch(_) {}
+    finally { playing = false; }
+  }
+
+  // Старт, когда часы реально попали в поле зрения
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting && e.intersectionRatio >= 0.55){ startOnce(); }
+    });
+  }, { threshold:[0,0.25,0.5,0.75,1], rootMargin:'0px 0px -8% 0px' });
+  io.observe(clock);
+
+  // Подстраховка: проверяем положение при любом пользовательском скролле/таче/нажатии
+  ['wheel','touchstart','keydown'].forEach(ev=>{
+    addEventListener(ev, ()=>{
+      if (isAutoRunning()) return;
+      const r = clock.getBoundingClientRect();
+      const vh = innerHeight || document.documentElement.clientHeight;
+      if (r.top < vh*0.5 && r.bottom > vh*0.5) startOnce();
+    }, {passive:true});
+  });
+
+  // Если вернулись по bfcache (назад/вперёд), тоже проверим
+  addEventListener('pageshow', e=>{
+    if (e.persisted){
+      setTimeout(()=>{
+        const r = clock.getBoundingClientRect();
+        const vh = innerHeight || document.documentElement.clientHeight;
+        if (!played && !isAutoRunning() && r.top < vh*0.55 && r.bottom > vh*0.55) startOnce();
+      }, 0);
+    }
+  });
+})();
+</script>
+
 </script>
 </body>
 </html>
+
 
