@@ -17,7 +17,7 @@
       --reveal-dur:.7s; --reveal-ease:cubic-bezier(.22,1,.36,1); --reveal-distance:24px;
     }
     *{box-sizing:border-box}
-    html,body{height:100%; max-width:100%; overflow-x:hidden;} /* важный фикс */
+    html,body{height:100%}
     body{margin:0; color:var(--fg); background:var(--bg); font-family:Inter,system-ui,Arial,sans-serif}
     a{color:inherit; text-decoration:none}
     img{max-width:100%; display:block}
@@ -70,16 +70,7 @@
     @keyframes heartPulse{0%{transform:scale(1)}50%{transform:scale(1.16)}100%{transform:scale(1)}}
 
     /* === Расписание: круг-часы с фото === */
-    .clock{
-      --size:min(520px, 88vw);
-      width:var(--size);
-      aspect-ratio:1/1;
-      margin:10px auto 0;
-      position:relative;
-      display:grid;
-      place-items:center;
-      padding:clamp(8px,3.2vw,16px); /* безопасная зона */
-    }
+    .clock{ --size:min(520px, 88vw); width:var(--size); aspect-ratio:1/1; margin:10px auto 0; position:relative; display:grid; place-items:center; }
     .photo-frame{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:62%; aspect-ratio:1/1; border-radius:50%; overflow:hidden; background:#f4f4f4; border:4px solid #fff; box-shadow:var(--shadow); z-index:1; }
     .photo-frame .ph{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .6s ease }
     .photo-frame .ph.show{ opacity:1 }
@@ -87,11 +78,7 @@
     .ring-base{ fill:none; stroke:#e9e9e9; stroke-width:2 }
     .runner{ transition:transform .75s ease; z-index:2 }
     .runner circle{ r:6; fill:var(--accent) }
-    .mark{
-      position:absolute; transform:translate(-50%,-50%); text-align:center;
-      width:clamp(90px,24%,120px); /* не распираем страницу на мобилках */
-      opacity:.05; transition:opacity .4s ease .05s, transform .4s ease .05s; z-index:3;
-    }
+    .mark{ position:absolute; transform:translate(-50%,-50%); text-align:center; width:max(120px,28%); opacity:.05; transition:opacity .4s ease .05s, transform .4s ease .05s; z-index:3 }
     .mark.on{ opacity:1; transform:translate(-50%,-50%) scale(1.02) }
     .badge-time{ display:inline-block; padding:4px 10px; border-radius:999px; background:#fff; color:var(--accent); font-weight:700; box-shadow:0 0 0 6px #fff; margin-bottom:6px; white-space:nowrap; }
     .mark .txt{ font-size:14px; color:var(--fg) }
@@ -107,7 +94,7 @@
       z-index:5; pointer-events:none;
     }
 
-    /* Карусель / marquee */
+    /* Marquee */
     .marquee{position:relative; overflow:hidden; margin-top:10px}
     .marquee .track{display:flex; gap:12px; width:max-content; animation:marquee var(--marquee-dur,40s) linear infinite}
     .marquee .slide{position:relative; flex:0 0 auto; width:min(75vw,420px); height:400px; border-radius:16px; border:1px solid var(--line); overflow:hidden; background:#f6f6f6; box-shadow:var(--shadow)}
@@ -117,11 +104,8 @@
     .marquee::after{right:0; transform:scaleX(-1)}
     .marquee::before{left:0}
     @keyframes marquee{from{transform:translateX(0)} to{transform:translateX(-50%)}}
-    .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 12px; color:#fff; font-weight:600; font-size:14px; background:linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,0)); text-shadow:0 2px 8px rgba(0,0,0,.35)}
 
-    /* Чипсы */
-    .chips{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:12px}
-    .chip{display:inline-block; padding:8px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--fg); font-weight:600; box-shadow:var(--shadow)}
+    .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 12px; color:#fff; font-weight:600; font-size:14px; background:linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,0)); text-shadow:0 2px 8px rgba(0,0,0,.35)}
 
     .owners{font:700 clamp(26px,6vw,40px) 'Playfair Display',serif; color:var(--accent)}
     .address .link{display:inline-flex; align-items:center; gap:8px; padding:12px 14px; border:1px solid var(--accent); border-radius:12px; margin:12px auto 0}
@@ -131,24 +115,12 @@
     /* ===== ЛОКАЦИЯ ===== */
     .section.location{margin-top:clamp(80px,10vw,150px); text-align:center}
     .loc-title{color:var(--accent); text-transform:uppercase; letter-spacing:.14em; margin:0 0 40px}
-    .loc-card{
-      max-width:980px; margin:0 auto; padding:0;
-      background:transparent; border:0; box-shadow:none;
-      display:grid; justify-items:center; text-align:center;
-    }
+    .loc-card{max-width:980px; margin:0 auto; padding:0; background:transparent; border:0; box-shadow:none; display:grid; place-items:center; text-align:center}
     .loc-venue{font:700 clamp(20px,4vw,26px) 'Playfair Display',serif; line-height:1.32; margin:0 0 12px}
     .loc-venue .accent{color:var(--accent)}
     .loc-address{color:var(--muted); font-size:clamp(15px,2.6vw,19px); line-height:1.5; margin:0 0 24px}
-
-    .loc-photo{
-      width:min(980px,100%);
-      margin:0px auto 26px; /* центр строго */
-      border-radius:18px; overflow:hidden;
-      aspect-ratio:16/9; background:#f3f3f3;
-      object-position:center center;
-    }
-    .loc-photo img{width:100%; height:100%; object-fit:cover; object-position:center center;}
-
+    .loc-photo{margin:0 auto 26px; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#f3f3f3; max-width:min(980px,96%); display:block}
+    .loc-photo img{width:100%; height:100%; object-fit:cover; object-position:center center}
     .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04em; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
     .loc-btn:hover{transform:translateY(-1px); background:var(--accent-2)}
     .loc-btn:active{transform:translateY(0); box-shadow:0 6px 12px rgba(122,30,44,.18)}
@@ -178,6 +150,7 @@
     .footer-title{  font:700 clamp(28px,5.6vw,44px) 'Playfair Display',serif; margin:10px 0 6px }
     .footer-names{  font:700 clamp(30px,6.4vw,50px) 'Playfair Display',serif; color:var(--accent); margin-top:8px }
     .legal{ position:relative; z-index:1; text-align:center; color:var(--muted); padding:16px }
+    @media (max-width: 640px){ .footer-hero{ margin-top:40px; } }
 
     /* ================== SCROLL-REVEAL ================== */
     .reveal{ opacity:0; transform:translateY(var(--reveal-distance)); filter:blur(6px);
@@ -193,11 +166,11 @@
       .reveal,.reveal.in{ opacity:1; transform:none; filter:none; transition:none }
     }
 
-    /* Кнопка музыки – сдвиг ↑50px и ←25px (с учётом safe-area на iOS) */
+    /* Кнопка музыки – сверху справа */
     .bgm-toggle{
       position:fixed;
-      right:calc(41px + env(safe-area-inset-right, 0px));   /* 16 + 25 */
-      bottom:calc(66px + env(safe-area-inset-bottom, 0px)); /* 16 + 50 */
+      top:calc(16px + 50px + env(safe-area-inset-top, 0px));
+      right:calc(16px + 25px + env(safe-area-inset-right, 0px));
       z-index:9999;
       width:56px; height:56px; border-radius:999px;
       display:grid; place-items:center; cursor:pointer;
@@ -209,27 +182,11 @@
     .bgm-toggle:hover{ transform:translateY(-1px) }
     .bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
     .bgm-toggle .icon{ line-height:1 }
-    /* Мобильный тюнинг: больше зазор между кнопками */
-@media (max-width: 420px){
-  .hero .panel{
-    padding-bottom: 120px; /* +место под плавающую кнопку */
-  }
-  .bgm-toggle{
-    width:52px; height:52px;
-    right: calc(56px + env(safe-area-inset-right, 0px)); /* ещё левее на ~15px */
-    bottom: calc(86px + env(safe-area-inset-bottom, 0px));/* ещё выше на ~20px */
-  }
-}
 
-/* Совсем узкие экраны */
-@media (max-width: 340px){
-  .bgm-toggle{
-    width:48px; height:48px;
-    right: calc(64px + env(safe-area-inset-right, 0px));
-    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
-  }
-}
-
+    /* Смещение часов вправо на телефонах (+40px) */
+    @media (max-width: 480px){
+      #schedule .clock{ transform: translateX(40px); }
+    }
   </style>
 </head>
 <body>
@@ -241,8 +198,8 @@
       <div class="subtitle">Тёплый семейный вечер в кругу близких</div>
       <div class="meta">
         <div class="badge">Дата: <b>3 октября</b></div>
-        <div class="badge">Время: <b>12:00</b></div>
-        <div class="badge">Место: <b>Банкет-холл «[Название]»</b></div>
+        <div class="badge">Время: <b>17:00</b></div>
+        <div class="badge"><b>Banket Hall Талас</b></div>
       </div>
       <button class="scroll-btn" id="scrollBtn" aria-label="Прокрутить вниз">↓ Пролистать</button>
     </div>
@@ -269,12 +226,12 @@
     </div>
   </section>
 
-  <!-- РАСПИСАНИЕ: КРУГ-ЧАСЫ + ФОТО -->
+  <!-- РАСПИСАНИЕ 17:00–23:00 -->
   <section class="section" id="schedule">
     <h2 class="h2">Расписание торжества</h2>
     <div class="clock" id="clock">
       <div class="photo-frame" aria-label="Иллюстрация текущего этапа">
-        <img id="phA" class="ph show" src="img/schedule/17-welcome.jpg" alt="Сбор гостей" />
+        <img id="phA" class="ph show" src="welcome.jpeg" alt="Сбор гостей" />
         <img id="phB" class="ph"      src="" alt="" />
       </div>
       <svg viewBox="0 0 200 200" aria-hidden="true">
@@ -283,14 +240,13 @@
       </svg>
       <div id="runnerDot" class="runner-dot" aria-hidden="true"></div>
 
-      <div class="mark" data-hour="12"><div class="badge-time">12:00</div><div class="txt">Welcome & фото</div></div>
-      <div class="mark" data-hour="13"><div class="badge-time">13:00</div><div class="txt">Открытие торжества</div></div>
-      <div class="mark" data-hour="14"><div class="badge-time">14:00</div><div class="txt">Дастархан (обед)</div></div>
-      <div class="mark" data-hour="15"><div class="badge-time">15:00</div><div class="txt">Поздравления и тосты</div></div>
-      <div class="mark" data-hour="16"><div class="badge-time">16:00</div><div class="txt">Бата старших</div></div>
-      <div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Танцы и игры</div></div>
-      <div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Проводы невесты</div></div>
-      <div class="mark" data-hour="19"><div class="badge-time">19:00</div><div class="txt">Финал вечера</div></div>
+      <div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Welcome & фото</div></div>
+      <div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Открытие торжества</div></div>
+      <div class="mark" data-hour="19"><div class="badge-time">19:00</div><div class="txt">Дастархан (обед)</div></div>
+      <div class="mark" data-hour="20"><div class="badge-time">20:00</div><div class="txt">Поздравления и тосты</div></div>
+      <div class="mark" data-hour="21"><div class="badge-time">21:00</div><div class="txt">Бата старших</div></div>
+      <div class="mark" data-hour="22"><div class="badge-time">22:00</div><div class="txt">Проводы невесты</div></div>
+      <div class="mark" data-hour="23"><div class="badge-time">23:00</div><div class="txt">Финал вечера</div></div>
     </div>
   </section>
 
@@ -307,7 +263,7 @@
     </div>
   </section>
 
-  <!-- НЕМНОГО О БЕГИМАЙ -->
+  <!-- О БЕГИМАЙ -->
   <section class="section" id="bride">
     <h2 class="h2">Немного о Бегимай</h2>
     <p class="lead">Тёплое сердце, светлая улыбка и огромное желание делиться радостью с близкими.</p>
@@ -341,13 +297,6 @@
         <div class="slide"><img src="bema3.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
         <div class="slide"><img src="bema4.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
       </div>
-    </div>
-
-    <div class="chips">
-      <span class="chip">Любит: горные прогулки и чтение</span>
-      <span class="chip">Характер: внимательная и спокойная</span>
-      <span class="chip">Цвет настроения: бордовый и молочный</span>
-      <span class="chip">Мечта: много семейных путешествий</span>
     </div>
   </section>
 
@@ -401,8 +350,8 @@ function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
     const prevBehavior = html.style.scrollBehavior;
     html.style.scrollBehavior = 'auto';
 
-    const minY = 0;
-    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const minY   = 0;
+    const maxY   = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     const target = Math.min(maxY, Math.max(minY, toY));
     let y  = window.scrollY || window.pageYOffset || 0;
     let t0 = performance.now();
@@ -414,9 +363,7 @@ function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
       const dt = (t - t0) / 1000; t0 = t;
       const dir = target > y ? 1 : -1;
       y += dir * speed * dt;
-      if ((dir>0 && y >= target) || (dir<0 && y <= target)) {
-        y = target; window.scrollTo(0,y); html.style.scrollBehavior = prevBehavior; resolve(); return;
-      }
+      if ((dir>0 && y >= target) || (dir<0 && y <= target)) { y = target; window.scrollTo(0,y); html.style.scrollBehavior = prevBehavior; resolve(); return; }
       window.scrollTo(0,y);
       raf = requestAnimationFrame(step);
     };
@@ -436,9 +383,9 @@ function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
   for(let d=1; d<=last; d++){const e=document.createElement('div'); e.className='day'+(d===3?' heart':''); e.textContent=d; calGrid.appendChild(e);}
 })();
 
-/* Отсчёт */
+/* Отсчёт до 17:00 */
 (function(){
-  const target = new Date('2025-10-03T12:00:00');
+  const target = new Date('2025-10-03T17:00:00');
   const els = {d:document.getElementById('d'), h:document.getElementById('h'), m:document.getElementById('m'), s:document.getElementById('s')};
   if(!els.d) return;
   const tick=()=>{const now=new Date(); let diff=Math.max(0,target-now);
@@ -450,7 +397,7 @@ function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
   }; tick();
 })();
 
-/* Часы */
+/* Часы 17:00–23:00 */
 const runSchedule = (()=> {
   const clock  = document.getElementById('clock');
   if(!clock) return async()=>{};
@@ -460,16 +407,15 @@ const runSchedule = (()=> {
   const phA = document.getElementById('phA');
   const phB = document.getElementById('phB');
 
-  const seq = [12,13,14,15,16,17,18,19];
+  const seq = [17,18,19,20,21,22,23];
   const PHOTOS = {
-    12:{src:'welcome.jpeg', alt:'Сбор гостей'},
-    13:{src:'start.jpeg',   alt:'Открытие торжества'},
-    14:{src:'dinner.jpeg',  alt:'Дастархан (обед)'},
-    15:{src:'dance.jpg',    alt:'Поздравления и тосты'},
-    16:{src:'bata.jpg',     alt:'Бата старших'},
-    17:{src:'dance.jpg',    alt:'Танцы и игры'},
-    18:{src:'goodbye.jpg',  alt:'Проводы невесты'},
-    19:{src:'final.jpg',    alt:'Финал вечера'}
+    17:{src:'welcome.jpeg', alt:'Сбор гостей'},
+    18:{src:'start.jpeg',   alt:'Открытие торжества'},
+    19:{src:'dinner.jpeg',  alt:'Дастархан (обед)'},
+    20:{src:'dance.jpg',    alt:'Поздравления и тосты'},
+    21:{src:'bata.jpg',     alt:'Бата старших'},
+    22:{src:'goodbye.jpg',  alt:'Проводы невесты'},
+    23:{src:'final.jpg',    alt:'Финал вечера'}
   };
   Object.values(PHOTOS).forEach(({src})=>{ const i=new Image(); i.src=src; });
 
@@ -727,11 +673,14 @@ const runSchedule = (()=> {
     ['click','touchend','pointerup','keydown'].forEach(on);
   }
 
+  /* <<< ВАЖНО: «Пролистать» всегда включает музыку >>> */
   const scrollBtn = document.getElementById('scrollBtn');
   if (scrollBtn){
-    scrollBtn.addEventListener('click', ()=>{
-      const want = JSON.parse(localStorage.getItem('bgmOn')||'true');
-      if (want){ audio.muted = false; audio.play().catch(()=>{}); setBtn(true); }
+    scrollBtn.addEventListener('click', async ()=>{
+      audio.muted = false;
+      try { await audio.play(); } catch(_){}
+      setBtn(true);
+      localStorage.setItem('bgmOn','true');
     });
   }
 })();
