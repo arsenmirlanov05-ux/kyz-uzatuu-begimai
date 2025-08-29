@@ -121,7 +121,7 @@
     .loc-address{color:var(--muted); font-size:clamp(15px,2.6vw,19px); line-height:1.5; margin:0 0 24px}
     .loc-photo{margin:0 auto 26px; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#f3f3f3; max-width:min(980px,96%); display:block}
     .loc-photo img{width:100%; height:100%; object-fit:cover; object-position:center center}
-    .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04em; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
+    .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04ем; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
     .loc-btn:hover{transform:translateY(-1px); background:var(--accent-2)}
     .loc-btn:active{transform:translateY(0); box-shadow:0 6px 12px rgba(122,30,44,.18)}
 
@@ -205,28 +205,28 @@
     <div class="panel">
       <div class="eyebrow">Кыз узатуу</div>
       <h1 class="title">Begimai</h1>
-      <div class="subtitle">Тёплый семейный вечер в кругу близких</div>
+      <div class="subtitle">Жакындар менен жылуу үй-бүлөлүк кеч</div>
       <div class="meta">
-        <div class="badge">Дата: <b>3 октября</b></div>
-        <div class="badge">Время: <b>17:00</b></div>
+        <div class="badge">Күнү: <b>3-октябрь</b></div>
+        <div class="badge">Убактысы: <b>17:00</b></div>
         <div class="badge"><b>Banket Hall Талас</b></div>
       </div>
       <!-- Кнопка пролистать остаётся в хедере -->
-      <button class="scroll-btn" id="scrollBtn" aria-label="Прокрутить вниз">↓ Пролистать</button>
+      <button class="scroll-btn" id="scrollBtn" aria-label="Прокрутить вниз">↓ Төмөн жылдыруу</button>
     </div>
   </header>
 
   <!-- Кнопка "Продолжить просмотр" (появляется только после стопа пользователем) -->
-  <button class="continue-btn" id="continueBtn" aria-label="Продолжить просмотр" hidden>▶ Продолжить просмотр</button>
+  <button class="continue-btn" id="continueBtn" aria-label="Продолжить просмотр" hidden>▶ Көрүүнү улантуу</button>
 
   <section id="intro" class="section">
-    <h2 class="h2">Приглашение</h2>
-    <p class="lead">Мы с радостью приглашаем вас разделить этот значимый для нашей семьи день. Пожалуйста, присоединяйтесь к торжеству и тёплой атмосфере Кыз узатуу.</p>
+    <h2 class="h2">Чакыруу</h2>
+    <p class="lead">Бул күн биз үчүн өзгөчө. Келгиле, Кыз узатууну чогуу жылуу маанайда белгилейли.</p>
     <div class="sp"></div>
     <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
-      <div class="cd"><b id="d">0</b><span>дней</span></div>
-      <div class="cd"><b id="h">0</b><span>часов</span></div>
-      <div class="cd"><b id="m">0</b><span>минут</span></div>
+      <div class="cd"><b id="d">0</b><span>күн</span></div>
+      <div class="cd"><b id="h">0</b><span>саат</span></div>
+      <div class="cd"><b id="m">0</b><span>мүнөт</span></div>
       <div class="cd"><b id="s">0</b><span>секунд</span></div>
     </div>
   </section>
@@ -235,14 +235,14 @@
   <section class="section calendar">
     <div class="cal">
       <div class="cal-head"><div class="month">ОКТЯБРЬ</div></div>
-      <div style="color:var(--muted)">Праздничный день отмечен ❤</div>
+      <div style="color:var(--muted)">Майрам күнү ❤ менен белгиленген</div>
       <div class="grid" id="calGrid"></div>
     </div>
   </section>
 
   <!-- РАСПИСАНИЕ 17:00–23:00 -->
   <section class="section" id="schedule">
-    <h2 class="h2">Расписание торжества</h2>
+    <h2 class="h2">Тойдун программасы</h2>
     <div class="clock" id="clock">
       <div class="photo-frame" aria-label="Иллюстрация текущего этапа">
         <img id="phA" class="ph show" src="welcome.jpeg" alt="Сбор гостей" />
@@ -254,55 +254,55 @@
       </svg>
       <div id="runnerDot" class="runner-dot" aria-hidden="true"></div>
 
-      <div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Welcome & фото</div></div>
-      <div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Открытие торжества</div></div>
-      <div class="mark" data-hour="19"><div class="badge-time">19:00</div><div class="txt">Ужин</div></div>
-      <div class="mark" data-hour="20"><div class="badge-time">20:00</div><div class="txt">Поздравления и тосты</div></div>
-      <div class="mark" data-hour="21"><div class="badge-time">21:00</div><div class="txt">Бата старших</div></div>
-      <div class="mark" data-hour="22"><div class="badge-time">22:00</div><div class="txt">Проводы невесты</div></div>
-      <div class="mark" data-hour="23"><div class="badge-time">23:00</div><div class="txt">Финал вечера</div></div>
+      <div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Кош келиңиз & сүрөт</div></div>
+      <div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Ачылыш бөлүгү</div></div>
+      <div class="mark" data-hour="19"><div class="badge-time">19:00</div><div class="txt">Кечки тамак</div></div>
+      <div class="mark" data-hour="20"><div class="badge-time">20:00</div><div class="txt">Куттуктоолор жана тосттор</div></div>
+      <div class="mark" data-hour="21"><div class="badge-time">21:00</div><div class="txt">Улуулар батасы</div></div>
+      <div class="mark" data-hour="22"><div class="badge-time">22:00</div><div class="txt">Келин узатуу</div></div>
+      <div class="mark" data-hour="23"><div class="badge-time">23:00</div><div class="txt">Кеченин жыйынтыгы</div></div>
     </div>
   </section>
 
   <!-- ЛОКАЦИЯ -->
   <section class="section location">
-    <h2 class="h2 loc-title">ЛОКАЦИЯ</h2>
+    <h2 class="h2 loc-title">ЖАЙГАШКАН ЖЕРИ</h2>
     <div class="loc-card">
       <div class="loc-text">
         <div class="loc-venue">Banket Hall <span class="accent">«Талас»</span></div>
         <div class="loc-address">Талас, Улица Чынгыза Айтматова, 246</div>
       </div>
       <div class="loc-photo"><img src="restik.jpg" alt="Зал ресторана «Талас»" loading="lazy"></div>
-      <a class="loc-btn" href="https://go.2gis.com/M5tjs" target="_blank" rel="noopener">ПОСМОТРЕТЬ НА КАРТЕ</a>
+      <a class="loc-btn" href="https://go.2gis.com/M5tjs" target="_blank" rel="noopener">Картадан көрүү</a>
     </div>
   </section>
 
-  <!-- О БЕГИМАЙ (без чипсов) -->
+  <!-- НЕМНОГО О БЕГИМАЙ -->
   <section class="section" id="bride">
-    <h2 class="h2">Немного о Бегимай</h2>
-    <p class="lead">Тёплое сердце, светлая улыбка и огромное желание делиться радостью с близкими.</p>
+    <h2 class="h2">Бегимай жөнүндө</h2>
+    <p class="lead">Жылуу мүнөз, жаркын жылмайуу жана кубанычын бөлүшкөндү сүйөт.</p>
 
     <div class="marquee" id="brideMarquee" style="--marquee-dur: 36s" aria-label="О нашей невесте">
       <div class="track">
         <div class="slide">
           <img src="bema11.jpg" alt="Портрет Бегимай" loading="eager" decoding="async" fetchpriority="high"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
-          <div class="cap">Бегимай — нежность и сила в одном сердце</div>
+          <div class="cap">Бегимай — назиктик менен күч бир жүрөктө</div>
         </div>
         <div class="slide">
           <img src="bema22.jpg" alt="Бегимай на прогулке"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
-          <div class="cap">Любит горы и долгие прогулки</div>
+          <div class="cap">Тоо жана узун сейилдерди жакшы көрөт</div>
         </div>
         <div class="slide">
           <img src="bema3.jpg" alt="Бегимай с родителями"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
-          <div class="cap">Благодарна родителям за поддержку и любовь</div>
+          <div class="cap">Ата-энесинин сүйүүсүнө жана колдоосуна ыраазы</div>
         </div>
         <div class="slide">
           <img src="bema33.jpg" alt="Весёлое фото с друзьями"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
-          <div class="cap">Друзья рядом — и сразу больше света</div>
+          <div class="cap">Достор жанында — баары жарык</div>
         </div>
         <!-- клоны -->
         <div class="slide"><img src="bema11.jpg"  alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
@@ -317,11 +317,11 @@
   <footer class="footer-hero">
     <img class="footer-img" src="footer.jpeg" alt="" loading="lazy">
     <div class="panel">
-      <div class="footer-eyebrow">С нетерпением вас ждём</div>
-      <div class="footer-title">Будем рады разделить этот вечер с вами</div>
+      <div class="footer-eyebrow">Сиздерди чыдамсыздык менен күтөбүз</div>
+      <div class="footer-title">Бул кечени сиздер менен бөлүшкөнүбүзгө кубанабыз</div>
       <div class="footer-names">Жакшыбек &amp; Салтанат</div>
     </div>
-    <div class="legal">© <span id="y"></span>. С любовью, семья.</div>
+    <div class="legal">© <span id="y"></span>. Сүйүү менен, үй-бүлө.</div>
   </footer>
 
   <!-- Фоновая музыка -->
@@ -673,5 +673,3 @@ const runSchedule = (()=> {
 </script>
 </body>
 </html>
-
-
