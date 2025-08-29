@@ -98,7 +98,7 @@
     .marquee{position:relative; overflow:hidden; margin-top:10px}
     .marquee .track{display:flex; gap:12px; width:max-content; animation:marquee var(--marquee-dur,40s) linear infinite}
     .marquee .slide{position:relative; flex:0 0 auto; width:min(75vw,420px); height:400px; border-radius:16px; border:1px solid var(--line); overflow:hidden; background:#f6f6f6; box-shadow:var(--shadow)}
-    .marquee .slide img{width:100%; height:100%; object-fit:cover; display:block}
+    .marquee .slide img{width:100%; height:120%; object-fit:cover; display:block}
     .marquee:hover .track{animation-play-state:paused}
     .marquee::before,.marquee::after{content:""; position:absolute; top:0; bottom:0; width:40px; pointer-events:none; background:linear-gradient(to right, rgba(122,30,44,.264), rgba(122,30,44,0))}
     .marquee::after{right:0; transform:scaleX(-1)}
@@ -183,10 +183,20 @@
     .bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
     .bgm-toggle .icon{ line-height:1 }
 
-    /* Смещение часов вправо на телефонах (+40px) */
-    @media (max-width: 480px){
-      #schedule .clock{ transform: translateX(40px); }
+    /* Кнопка "Продолжить просмотр" — фикс снизу, скрыта по умолчанию */
+    .continue-btn{
+      position:fixed;
+      left:50%;
+      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+      transform:translateX(-50%);
+      display:inline-flex; align-items:center; gap:10px;
+      padding:14px 18px; border-radius:999px; border:1px solid var(--accent);
+      color:#fff; background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      box-shadow:0 12px 24px rgba(122,30,44,.25);
+      cursor:pointer; z-index:9998;
     }
+    .continue-btn[hidden]{display:none}
+    .continue-btn:hover{transform:translateX(-50%) translateY(-1px)}
   </style>
 </head>
 <body>
@@ -201,9 +211,13 @@
         <div class="badge">Время: <b>17:00</b></div>
         <div class="badge"><b>Banket Hall Талас</b></div>
       </div>
+      <!-- Кнопка пролистать остаётся в хедере -->
       <button class="scroll-btn" id="scrollBtn" aria-label="Прокрутить вниз">↓ Пролистать</button>
     </div>
   </header>
+
+  <!-- Кнопка "Продолжить просмотр" (появляется только после стопа пользователем) -->
+  <button class="continue-btn" id="continueBtn" aria-label="Продолжить просмотр" hidden>▶ Продолжить просмотр</button>
 
   <section id="intro" class="section">
     <h2 class="h2">Приглашение</h2>
@@ -263,7 +277,7 @@
     </div>
   </section>
 
-  <!-- О БЕГИМАЙ -->
+  <!-- О БЕГИМАЙ (без чипсов) -->
   <section class="section" id="bride">
     <h2 class="h2">Немного о Бегимай</h2>
     <p class="lead">Тёплое сердце, светлая улыбка и огромное желание делиться радостью с близкими.</p>
@@ -271,13 +285,12 @@
     <div class="marquee" id="brideMarquee" style="--marquee-dur: 36s" aria-label="О нашей невесте">
       <div class="track">
         <div class="slide">
-          <img src="bema.jpg" alt="Портрет Бегимай, спокойный светлый фон"
-               loading="eager" decoding="async" fetchpriority="high"
+          <img src="bema11.jpg" alt="Портрет Бегимай" loading="eager" decoding="async" fetchpriority="high"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
           <div class="cap">Бегимай — нежность и сила в одном сердце</div>
         </div>
         <div class="slide">
-          <img src="bema2.png" alt="Бегимай на прогулке в горах"
+          <img src="bema22.jpg" alt="Бегимай на прогулке"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
           <div class="cap">Любит горы и долгие прогулки</div>
         </div>
@@ -287,30 +300,16 @@
           <div class="cap">Благодарна родителям за поддержку и любовь</div>
         </div>
         <div class="slide">
-          <img src="bema4.jpg" alt="Весёлое фото с друзьями"
+          <img src="bema33.jpg" alt="Весёлое фото с друзьями"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
           <div class="cap">Друзья рядом — и сразу больше света</div>
         </div>
-        <!-- клоны для бесшовности -->
-        <div class="slide"><img src="bema.jpg"  alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
-        <div class="slide"><img src="bema2.png" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <!-- клоны -->
+        <div class="slide"><img src="bema11.jpg"  alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <div class="slide"><img src="bema22.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
         <div class="slide"><img src="bema3.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
-        <div class="slide"><img src="bema4.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <div class="slide"><img src="bema33.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
       </div>
-    </div>
-  </section>
-
-  <!-- ПОЖЕЛАНИЕ -->
-  <section class="section wish" id="wish">
-    <div class="wish-card">
-      <div class="wish-title">Пожелание для этого вечера</div>
-      <p class="wish-text">
-        Пусть наш вечер наполнится теплом и благословением, а в дом Бегимай вместе
-        с вашими добрыми словами придут кут, береке и махаббат. Спасибо, что
-        разделяете с нами эту радость и делаете день особенным.
-      </p>
-      <div class="wish-divider"></div>
-      <div class="wish-sign">С любовью и уважением, Жакшыбек &amp; Салтанат</div>
     </div>
   </section>
 
@@ -327,7 +326,7 @@
 
   <!-- Фоновая музыка -->
   <audio id="bgm" preload="auto" loop playsinline>
-    <source src="lamour.mp3" type="audio/mpeg">
+    <source src="muzon.mp3" type="audio/mpeg">
   </audio>
   <!-- Тоггл-кнопка -->
   <button class="bgm-toggle" id="bgmToggle" aria-pressed="false" aria-label="Включить музыку">
@@ -397,7 +396,7 @@ function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
   }; tick();
 })();
 
-/* Часы 17:00–23:00 */
+/* Часы 17:00–23:00 с возможностью резюма */
 const runSchedule = (()=> {
   const clock  = document.getElementById('clock');
   if(!clock) return async()=>{};
@@ -445,38 +444,60 @@ const runSchedule = (()=> {
     show.src=pic.src; show.alt=pic.alt||'';
     requestAnimationFrame(()=>{ show.classList.add('show'); hide.classList.remove('show'); });
   }
-  function reset(){
+  function reset(startHour=seq[0]){
     marks.forEach(m=>m.classList.remove('on'));
     placeMarks();
-    moveRunner(seq[0]);
+    moveRunner(startHour);
     phA.classList.add('show'); phB.classList.remove('show');
-    phA.src = PHOTOS[seq[0]].src; phA.alt = PHOTOS[seq[0]].alt||'';
+    phA.src = PHOTOS[startHour].src; phA.alt = PHOTOS[startHour].alt||'';
   }
-  reset(); addEventListener('resize', placeMarks);
+  reset(seq[0]); addEventListener('resize', placeMarks);
 
-  return async ({stepMs=SCHEDULE_STEP_MS, pauseMs=SCHEDULE_PAUSE_MS, signal}={})=>{
-    reset();
-    for (let i=0;i<seq.length;i++){
+  return async ({stepMs=SCHEDULE_STEP_MS, pauseMs=SCHEDULE_PAUSE_MS, fromIndex=0, onProgress=()=>{}, signal}={})=>{
+    reset(seq[Math.max(0, fromIndex)]);
+    for (let i=fromIndex;i<seq.length;i++){
       if (signal?.aborted) throw 'aborted';
       const h = seq[i];
       moveRunner(h);
       const m = marks.find(mm=>+mm.dataset.hour===h);
       if (m) m.classList.add('on');
       swapPhoto(h);
+      onProgress(i); // сообщаем прогресс наружу
       await sleep(stepMs, signal);
       if (i<seq.length-1) await sleep(pauseMs, signal);
     }
   };
 })();
 
-/* Автоскролл */
+/* ===== Пролистывание: кнопка в хедере + отдельная кнопка "Продолжить просмотр" ===== */
 (function(){
-  const btn      = document.getElementById('scrollBtn');
-  const schedule = document.getElementById('schedule');
-  if (!btn || !schedule) return;
+  const btnStart  = document.getElementById('scrollBtn');   // в хедере
+  const btnCont   = document.getElementById('continueBtn'); // фикс снизу
+  const schedule  = document.getElementById('schedule');
+  const audio     = document.getElementById('bgm');
+  const musicBtn  = document.getElementById('bgmToggle');
+  if (!btnStart || !btnCont || !schedule) return;
+
+  function showContinue(){ btnCont.hidden = false; }
+  function hideContinue(){ btnCont.hidden = true; }
+
+  async function forceMusicOn(){
+    if (!audio) return;
+    audio.muted = false;
+    try { await audio.play(); } catch(_) {}
+    if (musicBtn){
+      musicBtn.classList.add('on');
+      musicBtn.setAttribute('aria-pressed','true');
+      const ic = musicBtn.querySelector('.icon'); if (ic) ic.textContent = '🔊';
+    }
+    localStorage.setItem('bgmOn','true');
+  }
 
   let journeyCtrl = null;
   let unbindUser  = ()=>{};
+  let lastStopReason = null;
+  let phase = 0;         // 0: к часам, 1: часы, 2: к низу, 3: готово
+  let nextIdx = 0;       // индекс для резюма часов
 
   const USER_CANCEL_EVENTS = ['wheel','touchstart','keydown','mousedown','pointerdown'];
   function bindUserCancel(){
@@ -485,30 +506,58 @@ const runSchedule = (()=> {
     return ()=> USER_CANCEL_EVENTS.forEach(ev=> removeEventListener(ev, handler, {passive:true}));
   }
 
-  function stopJourney(){
+  function stopJourney(reason){
     if (journeyCtrl){ journeyCtrl.abort(); journeyCtrl = null; }
-    unbindUser(); btn.removeAttribute('aria-busy');
+    unbindUser(); 
+    lastStopReason = reason ?? lastStopReason;
+    if (lastStopReason === 'user') showContinue(); else hideContinue();
+    btnStart.removeAttribute('aria-busy');
   }
 
-  async function startJourney(){
+  async function startJourney({resume=false}={}){
     if (journeyCtrl) { stopJourney(); return; }
+    await forceMusicOn();
+
+    btnStart.setAttribute('aria-busy','true');
+    hideContinue();
+    lastStopReason = null;
+    if (!resume){ phase = 0; nextIdx = 0; }
+
     journeyCtrl = new AbortController();
     const signal = journeyCtrl.signal;
     unbindUser = bindUserCancel();
-    btn.setAttribute('aria-busy','true');
 
     const bottomY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     const r = schedule.getBoundingClientRect();
     const scheduleCenterY = (window.scrollY||window.pageYOffset) + r.top + r.height/2 - window.innerHeight/2;
 
     try{
-      await scrollToYConstant({toY: scheduleCenterY, signal});
-      await runSchedule({signal});
-      await scrollToYConstant({toY: bottomY, signal});
-    }catch(_){} finally{ stopJourney(); }
+      if (phase <= 0){
+        await scrollToYConstant({toY: scheduleCenterY, signal});
+        phase = 1;
+      }
+      if (phase === 1){
+        await runSchedule({
+          fromIndex: nextIdx,
+          signal,
+          onProgress: (i)=>{ nextIdx = i+1; }
+        });
+        phase = 2;
+      }
+      if (phase === 2){
+        await scrollToYConstant({toY: bottomY, signal});
+        phase = 3;
+      }
+    }catch(_){
+      // прервано пользователем — stopJourney('user') вызовется через обработчик
+    }finally{
+      // если до этого уже был user-stop — оставим кнопку Продолжить
+      stopJourney();
+    }
   }
 
-  btn.addEventListener('click', (e)=>{ e.preventDefault(); startJourney(); });
+  btnStart.addEventListener('click', (e)=>{ e.preventDefault(); startJourney({resume:false}); });
+  btnCont .addEventListener('click', (e)=>{ e.preventDefault(); startJourney({resume:true}); });
 
   const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
 })();
@@ -555,60 +604,9 @@ const runSchedule = (()=> {
   addReveal('.loc-btn');
   addReveal('.wish-card');
   addReveal('footer.footer-hero .panel');
-
-  window.addEventListener('pageshow', (e)=>{
-    if (e.persisted){
-      requestAnimationFrame(()=>{ document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el)); });
-    }
-  });
 })();
 
-/* Ручной старт часов при ручном скролле */
-(function(){
-  const clock = document.querySelector('#schedule .clock');
-  if (!clock || typeof runSchedule !== 'function') return;
-
-  const btn = document.getElementById('scrollBtn');
-  const isAutoRunning = () => btn && btn.getAttribute('aria-busy') === 'true';
-
-  let playing = false;
-  let played  = false;
-
-  async function startOnce(){
-    if (played || playing || isAutoRunning()) return;
-    playing = true;
-    try{ await runSchedule(); played = true; }catch(_){}
-    finally{ playing = false; }
-  }
-
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if (e.isIntersecting && e.intersectionRatio >= 0.55){ startOnce(); }
-    });
-  }, { threshold:[0,0.25,0.5,0.75,1], rootMargin:'0px 0px -8% 0px' });
-  io.observe(clock);
-
-  ['wheel','touchstart','keydown'].forEach(ev=>{
-    addEventListener(ev, ()=>{
-      if (isAutoRunning()) return;
-      const r = clock.getBoundingClientRect();
-      const vh = innerHeight || document.documentElement.clientHeight;
-      if (r.top < vh*0.5 && r.bottom > vh*0.5) startOnce();
-    }, {passive:true});
-  });
-
-  addEventListener('pageshow', e=>{
-    if (e.persisted){
-      setTimeout(()=>{
-        const r = clock.getBoundingClientRect();
-        const vh = innerHeight || document.documentElement.clientHeight;
-        if (!played && !isAutoRunning() && r.top < vh*0.55 && r.bottom > vh*0.55) startOnce();
-      }, 0);
-    }
-  });
-})();
-
-/* Музыка */
+/* Музыка (тоггл) */
 (function(){
   const audio = document.getElementById('bgm');
   const btn   = document.getElementById('bgmToggle');
@@ -649,7 +647,6 @@ const runSchedule = (()=> {
 
   btn.addEventListener('click', async ()=>{
     if (audio.paused){
-      audio.muted = false;
       await play(true);
       fadeTo(0.6, 300);
     }else{
@@ -671,17 +668,6 @@ const runSchedule = (()=> {
     const on  = (ev)=> window.addEventListener(ev, unlock, {once:true, passive:true});
     var off = ()=> ['click','touchend','pointerup','keydown'].forEach(ev=>window.removeEventListener(ev, unlock, {passive:true}));
     ['click','touchend','pointerup','keydown'].forEach(on);
-  }
-
-  /* <<< ВАЖНО: «Пролистать» всегда включает музыку >>> */
-  const scrollBtn = document.getElementById('scrollBtn');
-  if (scrollBtn){
-    scrollBtn.addEventListener('click', async ()=>{
-      audio.muted = false;
-      try { await audio.play(); } catch(_){}
-      setBtn(true);
-      localStorage.setItem('bgmOn','true');
-    });
   }
 })();
 </script>
