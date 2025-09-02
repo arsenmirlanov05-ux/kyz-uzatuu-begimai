@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
@@ -363,4 +364,135 @@ const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
     const s = Math.floor(diff / 1000);
     dEl.textContent = d; hEl.textContent = h; mEl.textContent = m; sEl.textContent = s;
   };
-  tick(); setInter
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ================== КАЛЕНДАРЬ (ОКТЯБРЬ) ================== */
+(() => {
+  const grid = $('#calGrid');
+  const monthStart = new Date(EVENT_YEAR, EVENT_MONTH, 1);
+  const monthEnd = new Date(EVENT_YEAR, EVENT_MONTH + 1, 0);
+  const dow = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
+
+  dow.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'dow';
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
+  const firstWeekday = (monthStart.getDay() + 6) % 7; // ПН=0
+  for (let i = 0; i < firstWeekday; i++){
+    const pad = document.createElement('div');
+    pad.className = 'day'; pad.textContent = '';
+    grid.appendChild(pad);
+  }
+  for (let day = 1; day <= monthEnd.getDate(); day++){
+    const el = document.createElement('div');
+    el.className = 'day' + (day === EVENT_DAY ? ' heart' : '');
+    el.textContent = day;
+    grid.appendChild(el);
+  }
+})();
+
+/* ================== КРУГ-РАСПИСАНИЕ (СТАРТ 12:00) ================== */
+(() => {
+  const clock  = $('#clock');
+  const runner = $('#runner');
+  const marks  = $$('.mark');
+  const phA = $('#phA'); const phB = $('#phB');
+
+  if (!clock || !runner || !marks.length) return;
+
+  const cx = 100, cy = 100, r = 80;
+  const hours = marks.map(m => parseInt(m.dataset.hour, 10)).sort((a,b)=>a-b);
+  const minHour = hours[0];     // 12
+  const maxHour = hours.at(-1); // 18
+  const steps = hours.length;   // 7
+
+  // равномерно по дуге 240°, старт сверху
+  const hourToAngle = (h) => {
+    const idx = hours.indexOf(h);
+    const step = 240 / (steps - 1);
+    return -90 + idx * step; // -90° = вверх
+  };
+
+  // расставляем подписи по окружности (немного внутрь)
+  const markR = r - 8;
+  marks.forEach(m => {
+    const h = parseInt(m.dataset.hour,10);
+    const a = hourToAngle(h) * Math.PI/180;
+    const x = cx + markR * Math.cos(a);
+    const y = cy + markR * Math.sin(a);
+    // перевод в % от контейнера
+    m.style.left = `calc(50% + ${(x-100)/100*50}%)`;
+    m.style.top  = `calc(50% + ${(y-100)/100*50}%)`;
+  });
+
+  // картинки по этапам
+  const photoFor = (h) => ({
+    12:'welcome.jpeg', 13:'open.jpeg', 14:'dinner.jpeg',
+    15:'toast.jpeg',   16:'bless.jpeg',17:'sendoff.jpeg', 18:'final.jpeg'
+  }[h] || 'welcome.jpeg');
+
+  const setPhoto = (src) => {
+    if (!src) return;
+    if (phA.classList.contains('show')){
+      phB.src = src; phB.alt = ''; phB.classList.add('show'); phA.classList.remove('show');
+    } else {
+      phA.src = src; phA.alt = ''; phA.classList.add('show'); phB.classList.remove('show');
+    }
+  };
+
+  // позиционирование бегунка (SVG-группа по координатам)
+  const setRunnerAt = (h) => {
+    const ang = hourToAngle(h) * Math.PI/180;
+    const x = cx + r * Math.cos(ang);
+    const y = cy + r * Math.sin(ang);
+    runner.style.transform = `translate(${x}px,${y}px)`;
+    marks.forEach(m => m.classList.toggle('on', parseInt(m.dataset.hour,10) === h));
+    setPhoto(photoFor(h));
+  };
+
+  // Определяем стартовый час: если сегодня — ставим по реальному времени, иначе на 12
+  const today = new Date();
+  let currentIndex = 0;
+  if (today.getFullYear() === EVENT_YEAR && today.getMonth() === EVENT_MONTH && today.getDate() === EVENT_DAY){
+    // ближайший час в пределах расписания
+    const nowH = clamp(today.getHours(), minHour, maxHour);
+    currentIndex = Math.max(0, hours.indexOf(nowH));
+  }
+  setRunnerAt(hours[currentIndex]);
+
+  // Авто-анимация: каждые 2.2s двигаем к следующему этапу по кругу
+  const STEP_MS = 2200;
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % hours.length;
+    setRunnerAt(hours[currentIndex]);
+  }, STEP_MS);
+
+  // ресайз не нужен — всё в % к контейнеру
+})();
+
+/* ================== ГОД В ФУТЕРЕ ================== */
+(() => { const y = $('#y'); if (y) y.textContent = new Date().getFullYear(); })();
+
+/* ================== МУЗЫКА ================== */
+(() => {
+  const btn = $('#bgmToggle'); const audio = $('#bgm');
+  if (!btn || !audio) return;
+  let on = false;
+  const setState = () => {
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  };
+  btn.addEventListener('click', async () => {
+    on = !on; setState();
+    try { on ? await audio.play() : audio.pause(); } catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
+
+
