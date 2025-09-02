@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Begimai — Кыз узатуу</title>
   <meta name="color-scheme" content="light" />
-  <!-- Мини-превью для WhatsApp / Telegram / Instagram DM -->
-  <meta property="og:title" content="Чакыруу">
-  <meta property="og:description" content="Begimai — Кыз узатуу">
-  <meta property="og:image" content="https://arsenmirlanov05-ux.github.io/kyz-uzatuu-begimai/111.jpg">
+<!-- Мини-превью для WhatsApp / Telegram / Instagram DM -->
+<meta property="og:title" content="Чакыруу ">
+<meta property="og:description" content="Begimai — Кыз узатуу">
+<meta property="og:image" content="https://arsenmirlanov05-ux.github.io/kyz-uzatuu-begimai/111.jpg">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
@@ -71,19 +71,30 @@
     }
     @keyframes heartPulse{0%{transform:scale(1)}50%{transform:scale(1.16)}100%{transform:scale(1)}}
 
-    /* === Расписание: круг-часы, старт 12:00 === */
+    /* === Расписание: круг-часы с фото === */
     .clock{ --size:min(520px, 88vw); width:var(--size); aspect-ratio:1/1; margin:10px auto 0; position:relative; display:grid; place-items:center; }
     .photo-frame{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:62%; aspect-ratio:1/1; border-radius:50%; overflow:hidden; background:#f4f4f4; border:4px solid #fff; box-shadow:var(--shadow); z-index:1; }
     .photo-frame .ph{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .6s ease }
     .photo-frame .ph.show{ opacity:1 }
     .clock svg{ width:100%; height:100%; z-index:0 }
     .ring-base{ fill:none; stroke:#e9e9e9; stroke-width:2 }
+    .runner{ transition:transform .75s ease; z-index:2 }
     .runner circle{ r:6; fill:var(--accent) }
-    .mark{ position:absolute; transform:translate(-50%,-50%); text-align:center; width:max(120px,28%); opacity:.12; transition:opacity .3s ease, transform .3s ease; z-index:3 }
+    .mark{ position:absolute; transform:translate(-50%,-50%); text-align:center; width:max(120px,28%); opacity:.05; transition:opacity .4s ease .05s, transform .4s ease .05s; z-index:3 }
     .mark.on{ opacity:1; transform:translate(-50%,-50%) scale(1.02) }
     .badge-time{ display:inline-block; padding:4px 10px; border-radius:999px; background:#fff; color:var(--accent); font-weight:700; box-shadow:0 0 0 6px #fff; margin-bottom:6px; white-space:nowrap; }
     .mark .txt{ font-size:14px; color:var(--fg) }
     @media (max-width:600px){ .mark .txt{font-size:13px} }
+
+    /* Точка-бегунок поверх всего */
+    .runner-dot{
+      position:absolute; left:0; top:0;
+      width:14px; height:14px; border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 4px #fff, 0 6px 18px rgba(122,30,44,.35);
+      transform:translate(-50%,-50%);
+      z-index:5; pointer-events:none;
+    }
 
     /* Marquee */
     .marquee{position:relative; overflow:hidden; margin-top:10px}
@@ -112,7 +123,7 @@
     .loc-address{color:var(--muted); font-size:clamp(15px,2.6vw,19px); line-height:1.5; margin:0 0 24px}
     .loc-photo{margin:0 auto 26px; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#f3f3f3; max-width:min(980px,96%); display:block}
     .loc-photo img{width:100%; height:100%; object-fit:cover; object-position:center center}
-    .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04em; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
+    .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04ем; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
     .loc-btn:hover{transform:translateY(-1px); background:var(--accent-2)}
     .loc-btn:active{transform:translateY(0); box-shadow:0 6px 12px rgba(122,30,44,.18)}
 
@@ -137,13 +148,27 @@
         linear-gradient(0deg, rgba(122,30,44,.35), rgba(122,30,44,.15) 40%, rgba(122,30,44,0) 70%);
     }
     .footer-hero .panel{ position:relative; z-index:1; width:min(920px,100%); padding:36px 18px 44px }
-    .footer-eyebrow{ letter-spacing:.18ем; text-transform:uppercase; font-weight:700; font-size:13px; color:var(--accent); opacity:.95 }
+    .footer-eyebrow{ letter-spacing:.18em; text-transform:uppercase; font-weight:700; font-size:13px; color:var(--accent); opacity:.95 }
     .footer-title{  font:700 clamp(28px,5.6vw,44px) 'Playfair Display',serif; margin:10px 0 6px }
     .footer-names{  font:700 clamp(30px,6.4vw,50px) 'Playfair Display',serif; color:var(--accent); margin-top:8px }
     .legal{ position:relative; z-index:1; text-align:center; color:var(--muted); padding:16px }
     @media (max-width: 640px){ .footer-hero{ margin-top:40px; } }
 
-    /* Кнопки */
+    /* ================== SCROLL-REVEAL ================== */
+    .reveal{ opacity:0; transform:translateY(var(--reveal-distance)); filter:blur(6px);
+      transition: opacity var(--reveal-dur) var(--reveal-ease),
+                 transform var(--reveal-dur) var(--reveal-ease),
+                 filter calc(var(--reveal-dur)*.8) var(--reveal-ease); will-change:transform,opacity,filter; }
+    .reveal.in{ opacity:1; transform:none; filter:blur(0) }
+    .reveal.left{  transform:translateX(calc(var(--reveal-distance)*-1)) }
+    .reveal.right{ transform:translateX(var(--reveal-distance)) }
+    .reveal.scale{ transform:scale(.96) }
+    .stagger > *{ transition-delay:calc(var(--i,0)*90ms) }
+    @media (prefers-reduced-motion: reduce){
+      .reveal,.reveal.in{ opacity:1; transform:none; filter:none; transition:none }
+    }
+
+    /* Кнопка музыки – сверху справа */
     .bgm-toggle{
       position:fixed;
       top:calc(16px + 50px + env(safe-area-inset-top, 0px));
@@ -160,6 +185,7 @@
     .bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
     .bgm-toggle .icon{ line-height:1 }
 
+    /* Кнопка "Продолжить просмотр" — фикс снизу, скрыта по умолчанию */
     .continue-btn{
       position:fixed;
       left:50%;
@@ -185,17 +211,19 @@
       <div class="meta">
         <div class="badge">Күнү: <b>3-октябрь</b></div>
         <div class="badge">Убактысы: <b>12:00</b></div>
-        <div class="badge"><b>Banquet Hall Талас</b></div>
+        <div class="badge"><b>Bankquet Hall Талас</b></div>
       </div>
+      <!-- Кнопка пролистать остаётся в хедере -->
       <button class="scroll-btn" id="scrollBtn" aria-label="Прокрутить вниз">↓ Төмөн жылдыруу</button>
     </div>
   </header>
 
+  <!-- Кнопка "Продолжить просмотр" (появляется только после стопа пользователем) -->
   <button class="continue-btn" id="continueBtn" aria-label="Продолжить просмотр" hidden>▶ Көрүүнү улантуу</button>
 
   <section id="intro" class="section">
     <h2 class="h2">Чакыруу</h2>
-    <p class="lead">Келгиле, салтанаттуу кечени жылуу маанайда өткөрөлү.</p>
+    <p class="lead">Келгиле, салтанаттуу кечени жылуу маанайда өткүзөлү.</p>
     <div class="sp"></div>
     <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
       <div class="cd"><b id="d">0</b><span>күн</span></div>
@@ -214,27 +242,29 @@
     </div>
   </section>
 
-  <!-- РАСПИСАНИЕ 12:00–18:00 -->
+  <!-- РАСПИСАНИЕ 17:00–23:00 -->
   <section class="section" id="schedule">
     <h2 class="h2">Тойдун программасы</h2>
     <div class="clock" id="clock">
       <div class="photo-frame" aria-label="Иллюстрация текущего этапа">
-        <img id="phA" class="ph show" src="welcome.jpeg" alt="Сбор коноктор" />
+        <img id="phA" class="ph show" src="welcome.jpeg" alt="Сбор гостей" />
         <img id="phB" class="ph"      src="" alt="" />
       </div>
       <svg viewBox="0 0 200 200" aria-hidden="true">
         <circle class="ring-base" cx="100" cy="100" r="80"/>
-        <g class="runner" id="runner"><circle cx="0" cy="0"/></g>
+        <g class="runner" id="runner" style="transform:translate(100px,20px)"><circle cx="0" cy="0"/></g>
       </svg>
+      <div id="runnerDot" class="runner-dot" aria-hidden="true"></div>
 
       <!-- Метки с 12 до 18 -->
-      <div class="mark" data-hour="12"><div class="badge-time">12:00</div><div class="txt">Кош келиңиз & Сүрөт</div></div>
-      <div class="mark" data-hour="13"><div class="badge-time">13:00</div><div class="txt">Ачылыш бөлүгү</div></div>
-      <div class="mark" data-hour="14"><div class="badge-time">14:00</div><div class="txt">Кечки тамак</div></div>
-      <div class="mark" data-hour="15"><div class="badge-time">15:00</div><div class="txt">Куттуктоолор жана тосттор</div></div>
-      <div class="mark" data-hour="16"><div class="badge-time">16:00</div><div class="txt">Улуулар батасы</div></div>
-      <div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Кыз узатуу</div></div>
-      <div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Кеченин жыйынтыгы</div></div>
+<div class="mark" data-hour="12"><div class="badge-time">12:00</div><div class="txt">Кош келиңиз & Сүрөт</div></div>
+<div class="mark" data-hour="13"><div class="badge-time">13:00</div><div class="txt">Ачылыш бөлүгү</div></div>
+<div class="mark" data-hour="14"><div class="badge-time">14:00</div><div class="txt">Кечки тамак</div></div>
+<div class="mark" data-hour="15"><div class="badge-time">15:00</div><div class="txt">Куттуктоолор жана тосттор</div></div>
+<div class="mark" data-hour="16"><div class="badge-time">16:00</div><div class="txt">Улуулар батасы</div></div>
+<div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Кыз узатуу</div></div>
+<div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Кеченин жыйынтыгы</div></div>
+
     </div>
   </section>
 
@@ -243,7 +273,7 @@
     <h2 class="h2 loc-title">ЖАЙГАШКАН ЖЕРИ</h2>
     <div class="loc-card">
       <div class="loc-text">
-        <div class="loc-venue">Banquet Hall <span class="accent">«Талас»</span></div>
+        <div class="loc-venue">Banket Hall <span class="accent">«Талас»</span></div>
         <div class="loc-address">Талас, Улица Чынгыза Айтматова, 246</div>
       </div>
       <div class="loc-photo"><img src="restik.jpg" alt="Зал ресторана «Талас»" loading="lazy"></div>
@@ -269,7 +299,7 @@
           <div class="cap"></div>
         </div>
         <div class="slide">
-          <img src="bema3.jpg" alt="Бегимай с родителями"
+          <img src="bema0000.jpg" alt="Бегимай с родителями"
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
           <div class="cap"></div>
         </div>
@@ -278,10 +308,10 @@
                onerror="this.src='welcome.jpeg'; this.onerror=null;">
           <div class="cap"></div>
         </div>
-        <!-- клоны для бесшовного бега -->
+        <!-- клоны -->
         <div class="slide"><img src="bema55.jpg"  alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
         <div class="slide"><img src="bema22.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
-        <div class="slide"><img src="bema3.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <div class="slide"><img src="bema0000.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
         <div class="slide"><img src="bema44.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
       </div>
     </div>
@@ -302,194 +332,412 @@
   <audio id="bgm" preload="auto" loop playsinline>
     <source src="piano.mp3" type="audio/mpeg">
   </audio>
+  <!-- Тоггл-кнопка -->
   <button class="bgm-toggle" id="bgmToggle" aria-pressed="false" aria-label="Включить музыку">
     <span class="icon">♫</span>
   </button>
 
 <script>
-/* ================== КОНСТАНТЫ СОБЫТИЯ ================== */
-const EVENT_YEAR  = 2025;   // при необходимости поменяй год
-const EVENT_MONTH = 9;      // Октябрь = 9 (0-индексация в Date)
-const EVENT_DAY   = 3;
-const EVENT_HOUR  = 12;     // старт 12:00
+const SCROLL_SPEED_PX_S = 120;
+const SCHEDULE_STEP_MS   = 1200;
+const SCHEDULE_PAUSE_MS  = 500;
 
-/* ================== УТИЛЫ ================== */
-const $  = (s,root=document)=>root.querySelector(s);
-const $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
-const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
+const sleep = (ms, signal)=> new Promise((res, rej)=>{
+  const t = setTimeout(res, ms);
+  if (signal) signal.addEventListener('abort', ()=>{ clearTimeout(t); rej('aborted'); }, {once:true});
+});
 
-/* ================== СКРОЛЛ КНОПКА + ПРОДОЛЖИТЬ ================== */
-(() => {
-  const scrollBtn = $('#scrollBtn');
-  const continueBtn = $('#continueBtn');
-  let userStopped = false;
+function scrollToYConstant({toY, speed=SCROLL_SPEED_PX_S, signal}){
+  return new Promise(resolve=>{
+    const html = document.documentElement;
+    const prevBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
 
-  scrollBtn?.addEventListener('click', () => {
-    const next = $('#intro');
-    if (!next) return;
-    next.scrollIntoView({behavior:'smooth', block:'start'});
+    const minY   = 0;
+    const maxY   = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const target = Math.min(maxY, Math.max(minY, toY));
+    let y  = window.scrollY || window.pageYOffset || 0;
+    let t0 = performance.now();
+    if (Math.abs(target - y) < 1) { html.style.scrollBehavior = prevBehavior; resolve(); return; }
+
+    let raf;
+    const step = (t)=>{
+      if (signal?.aborted){ cancelAnimationFrame(raf); html.style.scrollBehavior = prevBehavior; return; }
+      const dt = (t - t0) / 1000; t0 = t;
+      const dir = target > y ? 1 : -1;
+      y += dir * speed * dt;
+      if ((dir>0 && y >= target) || (dir<0 && y <= target)) { y = target; window.scrollTo(0,y); html.style.scrollBehavior = prevBehavior; resolve(); return; }
+      window.scrollTo(0,y);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
   });
+}
 
-  const stopKeys = new Set([' ', 'Spacebar', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End']);
-  const stopScroll = () => {
-    if (!userStopped) {
-      userStopped = true;
-      continueBtn.hidden = false;
+/* Календарь */
+(function(){
+  const calGrid=document.getElementById('calGrid');
+  if(!calGrid) return;
+  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d=>{const el=document.createElement('div'); el.className='dow'; el.textContent=d; calGrid.appendChild(el);});
+  const year=2025, month=9;
+  const first=new Date(year,month,1).getDay(), mapDow=d=>d===0?7:d;
+  for(let i=0;i<mapDow(first)-1;i++){const e=document.createElement('div'); e.className='day'; e.style.visibility='hidden'; calGrid.appendChild(e);}
+  const last=new Date(year,month+1,0).getDate();
+  for(let d=1; d<=last; d++){const e=document.createElement('div'); e.className='day'+(d===3?' heart':''); e.textContent=d; calGrid.appendChild(e);}
+})();
+
+/* Отсчёт до 12:00 */
+(function(){
+  const target = new Date('2025-10-03T12:00:00');
+  const els = {d:document.getElementById('d'), h:document.getElementById('h'), m:document.getElementById('m'), s:document.getElementById('s')};
+  if(!els.d) return;
+  const tick=()=>{const now=new Date(); let diff=Math.max(0,target-now);
+    els.s.textContent=Math.floor(diff/1000)%60;
+    els.m.textContent=Math.floor(diff/1000/60)%60;
+    els.h.textContent=Math.floor(diff/1000/60/60)%24;
+    els.d.textContent=Math.floor(diff/1000/60/60/24);
+    if(diff>0) requestAnimationFrame(()=>setTimeout(tick,1000));
+  }; tick();
+})();
+
+
+/* Часы 12:00–18:00 с возможностью резюма */
+const runSchedule = (()=> {
+  const clock  = document.getElementById('clock');
+  if(!clock) return async()=>{};
+  const runnerSvg = document.getElementById('runner');
+  const runnerDot = document.getElementById('runnerDot');
+  const marks  = Array.from(clock.querySelectorAll('.mark'));
+  const phA = document.getElementById('phA');
+  const phB = document.getElementById('phB');
+
+  const seq = [12,13,14,15,16,17,18];
+  const PHOTOS = {
+    12:{src:'welcome.jpeg', alt:'Сбор гостей'},
+    13:{src:'start.jpeg',   alt:'Открытие торжества'},
+    14:{src:'dinner.jpeg',  alt:'Дастархан (обед)'},
+    15:{src:'dance.jpg',    alt:'Поздравления и тосты'},
+    16:{src:'bata.jpg',     alt:'Бата старших'},
+    17:{src:'goodbye.jpg',  alt:'Проводы невесты'},
+    18:{src:'final.jpg',    alt:'Финал вечера'}
+  };
+  Object.values(PHOTOS).forEach(({src})=>{ const i=new Image(); i.src=src; });
+
+  const cx=100, cy=100, r=80;
+  const ang = h => ((h%12)*30 - 90) * Math.PI/180;
+  function placeMarks(){
+    marks.forEach(m=>{
+      const h=+m.dataset.hour, a=ang(h);
+      const rx=cx+(r+18)*Math.cos(a), ry=cy+(r+18)*Math.sin(a);
+      m.style.left=(rx/200*100)+'%'; m.style.top=(ry/200*100)+'%';
+    });
+  }
+  function moveRunner(hour){
+    const a=ang(hour);
+    const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+    if (runnerDot){
+      runnerDot.style.left = (x/200*100) + '%';
+      runnerDot.style.top  = (y/200*100) + '%';
+    } else if (runnerSvg){
+      runnerSvg.style.transform=`translate(${x}px,${y}px)`;
+    }
+  }
+  let useA=false;
+  function swapPhoto(hour){
+    const pic=PHOTOS[hour]; if(!pic) return;
+    useA=!useA; const show=useA?phA:phB, hide=useA?phB:phA;
+    show.src=pic.src; show.alt=pic.alt||'';
+    requestAnimationFrame(()=>{ show.classList.add('show'); hide.classList.remove('show'); });
+  }
+  function reset(startHour=seq[0]){
+    marks.forEach(m=>m.classList.remove('on'));
+    placeMarks();
+    moveRunner(startHour);
+    phA.classList.add('show'); phB.classList.remove('show');
+    phA.src = PHOTOS[startHour].src; phA.alt = PHOTOS[startHour].alt||'';
+  }
+  reset(seq[0]); addEventListener('resize', placeMarks);
+
+  return async ({stepMs=SCHEDULE_STEP_MS, pauseMs=SCHEDULE_PAUSE_MS, fromIndex=0, onProgress=()=>{}, signal}={})=>{
+    reset(seq[Math.max(0, fromIndex)]);
+    for (let i=fromIndex;i<seq.length;i++){
+      if (signal?.aborted) throw 'aborted';
+      const h = seq[i];
+      moveRunner(h);
+      const m = marks.find(mm=>+mm.dataset.hour===h);
+      if (m) m.classList.add('on');
+      swapPhoto(h);
+      onProgress(i);
+      await sleep(stepMs, signal);
+      if (i<seq.length-1) await sleep(pauseMs, signal);
     }
   };
-  ['wheel','touchstart','keydown'].forEach(ev => {
-    window.addEventListener(ev, (e) => {
-      if (ev === 'keydown' && !stopKeys.has(e.key)) return;
-      stopScroll();
+})();
+
+/* ===== Пролистывание: кнопка в хедере + отдельная кнопка "Продолжить просмотр" ===== */
+(function(){
+  const btnStart  = document.getElementById('scrollBtn');   // в хедере
+  const btnCont   = document.getElementById('continueBtn'); // фикс снизу
+  const schedule  = document.getElementById('schedule');
+  const audio     = document.getElementById('bgm');
+  const musicBtn  = document.getElementById('bgmToggle');
+  if (!btnStart || !btnCont || !schedule) return;
+
+  function showContinue(){ btnCont.hidden = false; }
+  function hideContinue(){ btnCont.hidden = true; }
+
+  async function forceMusicOn(){
+    if (!audio) return;
+    audio.muted = false;
+    try { await audio.play(); } catch(_) {}
+    if (musicBtn){
+      musicBtn.classList.add('on');
+      musicBtn.setAttribute('aria-pressed','true');
+      const ic = musicBtn.querySelector('.icon'); if (ic) ic.textContent = '🔊';
+    }
+    localStorage.setItem('bgmOn','true');
+  }
+
+  let journeyCtrl = null;
+  let unbindUser  = ()=>{};
+  let lastStopReason = null;
+  let phase = 0;         // 0: к часам, 1: часы, 2: к низу, 3: готово
+  let nextIdx = 0;       // индекс для резюма часов
+
+  const USER_CANCEL_EVENTS = ['wheel','touchstart','keydown','mousedown','pointerdown'];
+  function bindUserCancel(){
+    const handler = ()=> stopJourney('user');
+    USER_CANCEL_EVENTS.forEach(ev=> addEventListener(ev, handler, {passive:true}));
+    return ()=> USER_CANCEL_EVENTS.forEach(ev=> removeEventListener(ev, handler, {passive:true}));
+  }
+
+  function stopJourney(reason){
+    if (journeyCtrl){ journeyCtrl.abort(); journeyCtrl = null; }
+    unbindUser(); 
+    lastStopReason = reason ?? lastStopReason;
+    if (lastStopReason === 'user') showContinue(); else hideContinue();
+    btnStart.removeAttribute('aria-busy');
+  }
+
+  async function startJourney({resume=false}={}){
+    if (journeyCtrl) { stopJourney(); return; }
+    await forceMusicOn();
+
+    btnStart.setAttribute('aria-busy','true');
+    hideContinue();
+    lastStopReason = null;
+    if (!resume){ phase = 0; nextIdx = 0; }
+
+    journeyCtrl = new AbortController();
+    const signal = journeyCtrl.signal;
+    unbindUser = bindUserCancel();
+
+    const bottomY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const r = schedule.getBoundingClientRect();
+    const scheduleCenterY = (window.scrollY||window.pageYOffset) + r.top + r.height/2 - window.innerHeight/2;
+
+    try{
+      if (phase <= 0){
+        await scrollToYConstant({toY: scheduleCenterY, signal});
+        phase = 1;
+      }
+      if (phase === 1){
+        await runSchedule({
+          fromIndex: nextIdx,
+          signal,
+          onProgress: (i)=>{ nextIdx = i+1; }
+        });
+        phase = 2;
+      }
+      if (phase === 2){
+        await scrollToYConstant({toY: bottomY, signal});
+        phase = 3;
+      }
+    }catch(_){
+      // прервано пользователем — stopJourney('user') вызовется через обработчик
+    }finally{
+      // если до этого уже был user-stop — оставим кнопку Продолжить
+      stopJourney();
+    }
+  }
+
+  btnStart.addEventListener('click', (e)=>{ e.preventDefault(); startJourney({resume:false}); });
+  btnCont .addEventListener('click', (e)=>{ e.preventDefault(); startJourney({resume:true}); });
+
+  const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
+})();
+
+/* Scroll-reveal */
+(function(){
+  if (window.__revealInit) return;
+  window.__revealInit = true;
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io = new IntersectionObserver((entries)=>{
+    for (const e of entries){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  function addReveal(selector, extra){
+    document.querySelectorAll(selector).forEach(el=>{
+      el.classList.add('reveal'); if (extra) el.classList.add(extra);
+      if (reduce) el.classList.add('in'); else io.observe(el);
+    });
+  }
+  function makeStagger(selector){
+    document.querySelectorAll(selector).forEach(group=>{
+      group.classList.add('stagger');
+      Array.from(group.children).forEach((child,i)=>{
+        child.style.setProperty('--i', i);
+        child.classList.add('reveal');
+        if (reduce) child.classList.add('in'); else io.observe(child);
+      });
+    });
+  }
+
+  addReveal('header .panel');
+  makeStagger('header .meta');
+  makeStagger('.countdown');
+  addReveal('.section .h2');
+  addReveal('.section .lead');
+  addReveal('.calendar .cal');
+  addReveal('#schedule .clock');
+  addReveal('.marquee');
+  addReveal('.loc-card .loc-photo','left');
+  addReveal('.loc-card .loc-text','right');
+  addReveal('.loc-btn');
+  addReveal('.wish-card');
+  addReveal('footer.footer-hero .panel');
+})();
+
+/* Музыка (тоггл) */
+(function(){
+  const audio = document.getElementById('bgm');
+  const btn   = document.getElementById('bgmToggle');
+  if(!audio || !btn) return;
+
+  audio.volume = 0.6;
+  const saved = localStorage.getItem('bgmOn');
+  let wantOn  = saved ? JSON.parse(saved) : true;
+
+  function setBtn(on){
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on);
+    btn.title = on ? 'Выключить музыку' : 'Включить музыку';
+    btn.querySelector('.icon').textContent = on ? '🔊' : '♫';
+  }
+  setBtn(false);
+
+  function fadeTo(volTarget=1, ms=300){
+    const steps = 20, from = audio.volume, delta = (volTarget - from)/steps;
+    let i=0; const t = setInterval(()=>{ i++; audio.volume = Math.min(1, Math.max(0, from + delta*i));
+      if(i>=steps) clearInterval(t);
+    }, ms/steps);
+  }
+
+  async function play(unmute=false){
+    try{
+      if (unmute) audio.muted = false;
+      await audio.play();
+      setBtn(true);
+      localStorage.setItem('bgmOn','true');
+    }catch(e){ setBtn(false); }
+  }
+  function pause(){
+    audio.pause();
+    setBtn(false);
+    localStorage.setItem('bgmOn','false');
+  }
+
+  btn.addEventListener('click', async ()=>{
+    if (audio.paused){
+      await play(true);
+      fadeTo(0.6, 300);
+    }else{
+      fadeTo(0, 200);
+      setTimeout(()=>pause(), 200);
+    }
+  });
+
+  audio.muted = true;
+  if (wantOn){
+    audio.play().catch(()=>{});
+    const unlock = async ()=>{
+      off();
+      audio.muted = false;
+      try { await audio.play(); } catch(_){}
+      setBtn(true); fadeTo(0.6, 300);
+      localStorage.setItem('bgmOn','true');
+    };
+    const on  = (ev)=> window.addEventListener(ev, unlock, {once:true, passive:true});
+    var off = ()=> ['click','touchend','pointerup','keydown'].forEach(ev=>window.removeEventListener(ev, unlock, {passive:true}));
+    ['click','touchend','pointerup','keydown'].forEach(on);
+  }
+})();
+</script>
+  <script>
+/* Ручной старт часов при ручном скролле */
+(function(){
+  const clock = document.querySelector('#schedule .clock');
+  if (!clock || typeof runSchedule !== 'function') return;
+
+  const btn = document.getElementById('scrollBtn');
+  const isAutoRunning = () => btn && btn.getAttribute('aria-busy') === 'true';
+
+  let playing = false;
+  let played  = false;
+
+  async function startOnce(){
+    if (played || playing || isAutoRunning()) return;
+    playing = true;
+    try { await runSchedule(); played = true; } catch(_) {}
+    finally { playing = false; }
+  }
+
+  // Старт, когда часы реально попали в поле зрения
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting && e.intersectionRatio >= 0.55){ startOnce(); }
+    });
+  }, { threshold:[0,0.25,0.5,0.75,1], rootMargin:'0px 0px -8% 0px' });
+  io.observe(clock);
+
+  // Подстраховка: проверяем положение при любом пользовательском скролле/таче/нажатии
+  ['wheel','touchstart','keydown'].forEach(ev=>{
+    addEventListener(ev, ()=>{
+      if (isAutoRunning()) return;
+      const r = clock.getBoundingClientRect();
+      const vh = innerHeight || document.documentElement.clientHeight;
+      if (r.top < vh*0.5 && r.bottom > vh*0.5) startOnce();
     }, {passive:true});
   });
 
-  continueBtn?.addEventListener('click', () => {
-    continueBtn.hidden = true;
-    userStopped = false;
-  });
-})();
-
-/* ================== ОБРАТНЫЙ ОТСЧЁТ ================== */
-(() => {
-  const dEl = $('#d'), hEl = $('#h'), mEl = $('#m'), sEl = $('#s');
-  const target = new Date(EVENT_YEAR, EVENT_MONTH, EVENT_DAY, EVENT_HOUR, 0, 0);
-  const tick = () => {
-    const now = new Date();
-    let diff = Math.max(0, target - now);
-    const d = Math.floor(diff / (1000*60*60*24)); diff -= d*24*60*60*1000;
-    const h = Math.floor(diff / (1000*60*60));    diff -= h*60*60*1000;
-    const m = Math.floor(diff / (1000*60));       diff -= m*60*1000;
-    const s = Math.floor(diff / 1000);
-    dEl.textContent = d; hEl.textContent = h; mEl.textContent = m; sEl.textContent = s;
-  };
-  tick(); setInterval(tick, 1000);
-})();
-
-/* ================== КАЛЕНДАРЬ (ОКТЯБРЬ) ================== */
-(() => {
-  const grid = $('#calGrid');
-  const monthStart = new Date(EVENT_YEAR, EVENT_MONTH, 1);
-  const monthEnd = new Date(EVENT_YEAR, EVENT_MONTH + 1, 0);
-  const dow = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
-
-  dow.forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'dow';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
-
-  const firstWeekday = (monthStart.getDay() + 6) % 7; // ПН=0
-  for (let i = 0; i < firstWeekday; i++){
-    const pad = document.createElement('div');
-    pad.className = 'day'; pad.textContent = '';
-    grid.appendChild(pad);
-  }
-  for (let day = 1; day <= monthEnd.getDate(); day++){
-    const el = document.createElement('div');
-    el.className = 'day' + (day === EVENT_DAY ? ' heart' : '');
-    el.textContent = day;
-    grid.appendChild(el);
-  }
-})();
-
-/* ================== КРУГ-РАСПИСАНИЕ (СТАРТ 12:00) ================== */
-(() => {
-  const clock  = $('#clock');
-  const runner = $('#runner');
-  const marks  = $$('.mark');
-  const phA = $('#phA'); const phB = $('#phB');
-
-  if (!clock || !runner || !marks.length) return;
-
-  const cx = 100, cy = 100, r = 80;
-  const hours = marks.map(m => parseInt(m.dataset.hour, 10)).sort((a,b)=>a-b);
-  const minHour = hours[0];     // 12
-  const maxHour = hours.at(-1); // 18
-  const steps = hours.length;   // 7
-
-  // равномерно по дуге 240°, старт сверху
-  const hourToAngle = (h) => {
-    const idx = hours.indexOf(h);
-    const step = 240 / (steps - 1);
-    return -90 + idx * step; // -90° = вверх
-  };
-
-  // расставляем подписи по окружности (немного внутрь)
-  const markR = r - 8;
-  marks.forEach(m => {
-    const h = parseInt(m.dataset.hour,10);
-    const a = hourToAngle(h) * Math.PI/180;
-    const x = cx + markR * Math.cos(a);
-    const y = cy + markR * Math.sin(a);
-    // перевод в % от контейнера
-    m.style.left = `calc(50% + ${(x-100)/100*50}%)`;
-    m.style.top  = `calc(50% + ${(y-100)/100*50}%)`;
-  });
-
-  // картинки по этапам
-  const photoFor = (h) => ({
-    12:'welcome.jpeg', 13:'open.jpeg', 14:'dinner.jpeg',
-    15:'toast.jpeg',   16:'bless.jpeg',17:'sendoff.jpeg', 18:'final.jpeg'
-  }[h] || 'welcome.jpeg');
-
-  const setPhoto = (src) => {
-    if (!src) return;
-    if (phA.classList.contains('show')){
-      phB.src = src; phB.alt = ''; phB.classList.add('show'); phA.classList.remove('show');
-    } else {
-      phA.src = src; phA.alt = ''; phA.classList.add('show'); phB.classList.remove('show');
+  // Если вернулись по bfcache (назад/вперёд), тоже проверим
+  addEventListener('pageshow', e=>{
+    if (e.persisted){
+      setTimeout(()=>{
+        const r = clock.getBoundingClientRect();
+        const vh = innerHeight || document.documentElement.clientHeight;
+        if (!played && !isAutoRunning() && r.top < vh*0.55 && r.bottom > vh*0.55) startOnce();
+      }, 0);
     }
-  };
-
-  // позиционирование бегунка (SVG-группа по координатам)
-  const setRunnerAt = (h) => {
-    const ang = hourToAngle(h) * Math.PI/180;
-    const x = cx + r * Math.cos(ang);
-    const y = cy + r * Math.sin(ang);
-    runner.style.transform = `translate(${x}px,${y}px)`;
-    marks.forEach(m => m.classList.toggle('on', parseInt(m.dataset.hour,10) === h));
-    setPhoto(photoFor(h));
-  };
-
-  // Определяем стартовый час: если сегодня — ставим по реальному времени, иначе на 12
-  const today = new Date();
-  let currentIndex = 0;
-  if (today.getFullYear() === EVENT_YEAR && today.getMonth() === EVENT_MONTH && today.getDate() === EVENT_DAY){
-    // ближайший час в пределах расписания
-    const nowH = clamp(today.getHours(), minHour, maxHour);
-    currentIndex = Math.max(0, hours.indexOf(nowH));
-  }
-  setRunnerAt(hours[currentIndex]);
-
-  // Авто-анимация: каждые 2.2s двигаем к следующему этапу по кругу
-  const STEP_MS = 2200;
-  setInterval(() => {
-    currentIndex = (currentIndex + 1) % hours.length;
-    setRunnerAt(hours[currentIndex]);
-  }, STEP_MS);
-
-  // ресайз не нужен — всё в % к контейнеру
-})();
-
-/* ================== ГОД В ФУТЕРЕ ================== */
-(() => { const y = $('#y'); if (y) y.textContent = new Date().getFullYear(); })();
-
-/* ================== МУЗЫКА ================== */
-(() => {
-  const btn = $('#bgmToggle'); const audio = $('#bgm');
-  if (!btn || !audio) return;
-  let on = false;
-  const setState = () => {
-    btn.classList.toggle('on', on);
-    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-  };
-  btn.addEventListener('click', async () => {
-    on = !on; setState();
-    try { on ? await audio.play() : audio.pause(); } catch(e){}
   });
 })();
 </script>
+
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
