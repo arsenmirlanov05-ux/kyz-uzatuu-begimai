@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Begimai — Кыз узатуу</title>
   <meta name="color-scheme" content="light" />
-<!-- Мини-превью для WhatsApp / Telegram / Instagram DM -->
-<meta property="og:title" content="Чакыруу ">
-<meta property="og:description" content="Begimai — Кыз узатуу">
-<meta property="og:image" content="https://arsenmirlanov05-ux.github.io/kyz-uzatuu-begimai/111.jpg">
+  <!-- Мини-превью для WhatsApp / Telegram / Instagram DM -->
+  <meta property="og:title" content="Чакыруу">
+  <meta property="og:description" content="Begimai — Кыз узатуу">
+  <meta property="og:image" content="https://arsenmirlanov05-ux.github.io/kyz-uzatuu-begimai/111.jpg">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
@@ -60,6 +60,296 @@
     .cal{display:grid; gap:12px; padding:20px 12px}
     .cal-head{display:flex; justify-content:center; align-items:center; gap:10px}
     .month{font:700 clamp(20px,5vw,28px) 'Playfair Display',serif; letter-spacing:.08em; text-transform:uppercase; color:#2a2a2a}
+    .grid{display:grid; grid-template-columns:repeat(7,minmax(28px,1fr)); gap:12px; max-width:360px; margin:0 auto; justify-items:center}
+    .dow,.day{font:600 clamp(16px,4.8vw,20px) 'Playfair Display',serif; color:#2a2a2a}
+    .dow{text-transform:uppercase; letter-spacing:.06em; font-size:12px; color:var(--muted)}
+    .day.heart{position:relative; color:var(--accent); font-weight:700}
+    .day.heart::after{
+      content:""; position:absolute; top:-8px; right:-10px; width:18px; height:18px;
+      background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path fill="%237a1e2c" d="M23.6 0c-2.6 0-4.9 1.2-6.6 3.1C15.3 1.2 13 0 10.4 0 4.7 0 0 4.7 0 10.4c0 11.3 16 18.1 16 18.1s16-6.8 16-18.1C32 4.7 27.3 0 21.6 0z"/></svg>') center/contain no-repeat;
+      transform-origin:center; animation:heartPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes heartPulse{0%{transform:scale(1)}50%{transform:scale(1.16)}100%{transform:scale(1)}}
+
+    /* === Расписание: круг-часы с фото (начало в 12:00) === */
+    .clock{ --size:min(520px, 88vw); width:var(--size); aspect-ratio:1/1; margin:10px auto 0; position:relative; display:grid; place-items:center; }
+    .photo-frame{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:62%; aspect-ratio:1/1; border-radius:50%; overflow:hidden; background:#f4f4f4; border:4px solid #fff; box-shadow:var(--shadow); z-index:1; }
+    .photo-frame .ph{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .6s ease }
+    .photo-frame .ph.show{ opacity:1 }
+    .clock svg{ width:100%; height:100%; z-index:0 }
+    .ring-base{ fill:none; stroke:#e9e9e9; stroke-width:2 }
+    .runner{ transition:transform .75s ease; z-index:2 }
+    .runner circle{ r:6; fill:var(--accent) }
+    .mark{ position:absolute; transform:translate(-50%,-50%); text-align:center; width:max(120px,28%); opacity:.05; transition:opacity .4s ease .05s, transform .4s ease .05s; z-index:3 }
+    .mark.on{ opacity:1; transform:translate(-50%,-50%) scale(1.02) }
+    .badge-time{ display:inline-block; padding:4px 10px; border-radius:999px; background:#fff; color:var(--accent); font-weight:700; box-shadow:0 0 0 6px #fff; margin-bottom:6px; white-space:nowrap; }
+    .mark .txt{ font-size:14px; color:var(--fg) }
+    @media (max-width:600px){ .mark .txt{font-size:13px} }
+
+    /* Точка-бегунок */
+    .runner-dot{
+      position:absolute; left:0; top:0;
+      width:14px; height:14px; border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 4px #fff, 0 6px 18px rgba(122,30,44,.35);
+      transform:translate(-50%,-50%);
+      z-index:5; pointer-events:none;
+    }
+
+    /* Marquee */
+    .marquee{position:relative; overflow:hidden; margin-top:10px}
+    .marquee .track{display:flex; gap:12px; width:max-content; animation:marquee var(--marquee-dur,40s) linear infinite}
+    .marquee .slide{position:relative; flex:0 0 auto; width:min(75vw,420px); height:400px; border-radius:16px; border:1px solid var(--line); overflow:hidden; background:#f6f6f6; box-shadow:var(--shadow)}
+    .marquee .slide img{width:100%; height:120%; object-fit:cover; display:block}
+    .marquee:hover .track{animation-play-state:paused}
+    .marquee::before,.marquee::after{content:""; position:absolute; top:0; bottom:0; width:40px; pointer-events:none; background:linear-gradient(to right, rgba(122,30,44,.264), rgba(122,30,44,0))}
+    .marquee::after{right:0; transform:scaleX(-1)}
+    .marquee::before{left:0}
+    @keyframes marquee{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+    .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 12px; color:#fff; font-weight:600; font-size:14px; background:linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,0)); text-shadow:0 2px 8px rgba(0,0,0,.35)}
+
+    .owners{font:700 clamp(26px,6vw,40px) 'Playfair Display',serif; color:var(--accent)}
+    .address .link{display:inline-flex; align-items:center; gap:8px; padding:12px 14px; border:1px solid var(--accent); border-radius:12px; margin:12px auto 0}
+    .address .link:hover{background:#faf6f7}
+    footer{padding:28px 16px; color:var(--muted); text-align:center}
+
+    /* ===== ЛОКАЦИЯ ===== */
+    .section.location{margin-top:clamp(80px,10vw,150px); text-align:center}
+    .loc-title{color:var(--accent); text-transform:uppercase; letter-spacing:.14em; margin:0 0 40px}
+    .loc-card{max-width:980px; margin:0 auto; padding:0; background:transparent; border:0; box-shadow:none; display:grid; place-items:center; text-align:center}
+    .loc-venue{font:700 clamp(20px,4vw,26px) 'Playfair Display',serif; line-height:1.32; margin:0 0 12px}
+    .loc-venue .accent{color:var(--accent)}
+    .loc-address{color:var(--muted); font-size:clamp(15px,2.6vw,19px); line-height:1.5; margin:0 0 24px}
+    .loc-photo{margin:0 auto 26px; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#f3f3f3; max-width:min(980px,96%); display:block}
+    .loc-photo img{width:100%; height:100%; object-fit:cover; object-position:center center}
+    .loc-btn{display:inline-block; padding:16px 26px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; letter-spacing:.04em; box-shadow:0 10px 20px rgba(122,30,44,.18); transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
+    .loc-btn:hover{transform:translateY(-1px); background:var(--accent-2)}
+    .loc-btn:active{transform:translateY(0); box-shadow:0 6px 12px rgba(122,30,44,.18)}
+
+    /* Пожелание */
+    .wish{max-width:900px; margin:40px auto 0; padding:0 16px; text-align:center}
+    .wish-card{ background:#fff; border:1px solid var(--line); border-radius:22px; padding:34px 26px; box-shadow:0 24px 70px rgba(122,30,44,.10); }
+    .wish-title{ font:700 clamp(22px,4.2vw,30px) 'Playfair Display',serif; color:var(--accent); margin:0 0 10px; }
+    .wish-text{ font:italic 600 clamp(18px,3.6vw,22px) 'Playfair Display',serif; color:#2a2a2a; line-height:1.55; margin:0 auto; max-width:720px; }
+    .wish-divider{ height:1px; width:140px; margin:16px auto; background:linear-gradient(90deg,transparent,var(--accent),transparent); opacity:.6; }
+    .wish-sign{color:var(--muted); font-weight:600; letter-spacing:.02em}
+
+    /* Фото-футер */
+    .footer-hero{
+      padding:0; margin-top:60px; min-height:100svh; position:relative;
+      display:grid; place-items:center; text-align:center; overflow:hidden; color:#333;
+    }
+    .footer-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .footer-hero::after{
+      content:""; position:absolute; inset:0;
+      background:
+        linear-gradient(0deg, rgba(255,255,255,0) 35%, rgba(255,255,255,.82) 70%, #fff 100%),
+        linear-gradient(0deg, rgba(122,30,44,.35), rgba(122,30,44,.15) 40%, rgba(122,30,44,0) 70%);
+    }
+    .footer-hero .panel{ position:relative; z-index:1; width:min(920px,100%); padding:36px 18px 44px }
+    .footer-eyebrow{ letter-spacing:.18em; text-transform:uppercase; font-weight:700; font-size:13px; color:var(--accent); opacity:.95 }
+    .footer-title{  font:700 clamp(28px,5.6vw,44px) 'Playfair Display',serif; margin:10px 0 6px }
+    .footer-names{  font:700 clamp(30px,6.4vw,50px) 'Playfair Display',serif; color:var(--accent); margin-top:8px }
+    .legal{ position:relative; z-index:1; text-align:center; color:var(--muted); padding:16px }
+    @media (max-width: 640px){ .footer-hero{ margin-top:40px; } }
+
+    /* ================== SCROLL-REVEAL ================== */
+    .reveal{ opacity:0; transform:translateY(var(--reveal-distance)); filter:blur(6px);
+      transition: opacity var(--reveal-dur) var(--reveal-ease),
+                 transform var(--reveal-dur) var(--reveal-ease),
+                 filter calc(var(--reveal-dur)*.8) var(--reveal-ease); will-change:transform,opacity,filter; }
+    .reveal.in{ opacity:1; transform:none; filter:blur(0) }
+    .reveal.left{  transform:translateX(calc(var(--reveal-distance)*-1)) }
+    .reveal.right{ transform:translateX(var(--reveal-distance)) }
+    .reveal.scale{ transform:scale(.96) }
+    .stagger > *{ transition-delay:calc(var(--i,0)*90ms) }
+    @media (prefers-reduced-motion: reduce){
+      .reveal,.reveal.in{ opacity:1; transform:none; filter:none; transition:none }
+    }
+
+    /* Кнопка музыки – сверху справа */
+    .bgm-toggle{
+      position:fixed;
+      top:calc(16px + 50px + env(safe-area-inset-top, 0px));
+      right:calc(16px + 25px + env(safe-area-inset-right, 0px));
+      z-index:9999;
+      width:56px; height:56px; border-radius:999px;
+      display:grid; place-items:center; cursor:pointer;
+      border:1px solid #a02a3d; background:linear-gradient(180deg,#7a1e2c,#a02a3d);
+      color:#fff; font-weight:700; font-size:16px;
+      box-shadow:0 10px 20px rgba(122,30,44,.25);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .bgm-toggle:hover{ transform:translateY(-1px) }
+    .bgm-toggle.on{ outline:2px solid rgba(122,30,44,.25) }
+    .bgm-toggle .icon{ line-height:1 }
+
+    /* Кнопка "Продолжить просмотр" — фикс снизу, скрыта по умолчанию */
+    .continue-btn{
+      position:fixed;
+      left:50%;
+      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+      transform:translateX(-50%);
+      display:inline-flex; align-items:center; gap:10px;
+      padding:14px 18px; border-radius:999px; border:1px solid var(--accent);
+      color:#fff; background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      box-shadow:0 12px 24px rgba(122,30,44,.25);
+      cursor:pointer; z-index:9998;
+    }
+    .continue-btn[hidden]{display:none}
+    .continue-btn:hover{transform:translateX(-50%) translateY(-1px)}
+  </style>
+</head>
+<body>
+  <!-- ШАПКА -->
+  <header class="hero" style="--header-img:url('header.jpeg')">
+    <div class="panel">
+      <div class="eyebrow">Кыз узатуу</div>
+      <h1 class="title">Begimai</h1>
+      <div class="subtitle">Жакындар менен жылуу үй-бүлөлүк кеч</div>
+      <div class="meta">
+        <div class="badge">Күнү: <b>3-октябрь</b></div>
+        <div class="badge">Убактысы: <b>12:00</b></div>
+        <div class="badge"><b>Banquet Hall Талас</b></div>
+      </div>
+      <button class="scroll-btn" id="scrollBtn" aria-label="Прокрутить вниз">↓ Төмөн жылдыруу</button>
+    </div>
+  </header>
+
+  <!-- Кнопка "Продолжить просмотр" (появляется только после стопа пользователем) -->
+  <button class="continue-btn" id="continueBtn" aria-label="Продолжить просмотр" hidden>▶ Көрүүнү улантуу</button>
+
+  <section id="intro" class="section">
+    <h2 class="h2">Чакыруу</h2>
+    <p class="lead">Келгиле, салтанаттуу кечени жылуу маанайда өткөрөлү.</p>
+    <div class="sp"></div>
+    <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
+      <div class="cd"><b id="d">0</b><span>күн</span></div>
+      <div class="cd"><b id="h">0</b><span>саат</span></div>
+      <div class="cd"><b id="m">0</b><span>мүнөт</span></div>
+      <div class="cd"><b id="s">0</b><span>секунд</span></div>
+    </div>
+  </section>
+
+  <!-- Календарь -->
+  <section class="section calendar">
+    <div class="cal">
+      <div class="cal-head"><div class="month">ОКТЯБРЬ</div></div>
+      <div style="color:var(--muted)">Майрам күнү ❤ менен белгиленген</div>
+      <div class="grid" id="calGrid"></div>
+    </div>
+  </section>
+
+  <!-- РАСПИСАНИЕ 12:00–18:00 -->
+  <section class="section" id="schedule">
+    <h2 class="h2">Тойдун программасы</h2>
+    <div class="clock" id="clock">
+      <div class="photo-frame" aria-label="Иллюстрация текущего этапа">
+        <img id="phA" class="ph show" src="welcome.jpeg" alt="Сбор коноктор" />
+        <img id="phB" class="ph"      src="" alt="" />
+      </div>
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="ring-base" cx="100" cy="100" r="80"/>
+        <!-- Позиция «бегунка» будет выставляться JS, 12:00 — вверх -->
+        <g class="runner" id="runner"><circle cx="0" cy="0"/></g>
+      </svg>
+      <div id="runnerDot" class="runner-dot" aria-hidden="true"></div>
+
+      <!-- Метки с 12 до 18 -->
+      <div class="mark" data-hour="12"><div class="badge-time">12:00</div><div class="txt">Кош келиңиз & Сүрөт</div></div>
+      <div class="mark" data-hour="13"><div class="badge-time">13:00</div><div class="txt">Ачылыш бөлүгү</div></div>
+      <div class="mark" data-hour="14"><div class="badge-time">14:00</div><div class="txt">Кечки тамак</div></div>
+      <div class="mark" data-hour="15"><div class="badge-time">15:00</div><div class="txt">Куттуктоолор жана тосттор</div></div>
+      <div class="mark" data-hour="16"><div class="badge-time">16:00</div><div class="txt">Улуулар батасы</div></div>
+      <div class="mark" data-hour="17"><div class="badge-time">17:00</div><div class="txt">Кыз узатуу</div></div>
+      <div class="mark" data-hour="18"><div class="badge-time">18:00</div><div class="txt">Кеченин жыйынтыгы</div></div>
+    </div>
+  </section>
+
+  <!-- ЛОКАЦИЯ -->
+  <section class="section location">
+    <h2 class="h2 loc-title">ЖАЙГАШКАН ЖЕРИ</h2>
+    <div class="loc-card">
+      <div class="loc-text">
+        <div class="loc-venue">Banquet Hall <span class="accent">«Талас»</span></div>
+        <div class="loc-address">Талас, Улица Чынгыза Айтматова, 246</div>
+      </div>
+      <div class="loc-photo"><img src="restik.jpg" alt="Зал ресторана «Талас»" loading="lazy"></div>
+      <a class="loc-btn" href="https://go.2gis.com/M5tjs" target="_blank" rel="noopener">Картадан көрүү</a>
+    </div>
+  </section>
+
+  <!-- НЕМНОГО О БЕГИМАЙ -->
+  <section class="section" id="bride">
+    <h2 class="h2">Бегимай жөнүндө</h2>
+    <p class="lead">Жылуу мүнөз, көңүлү жарык жана ак пейил</p>
+
+    <div class="marquee" id="brideMarquee" style="--marquee-dur: 36s" aria-label="О нашей невесте">
+      <div class="track">
+        <div class="slide">
+          <img src="bema55.jpg" alt="Портрет Бегимай" loading="eager" decoding="async" fetchpriority="high"
+               onerror="this.src='welcome.jpeg'; this.onerror=null;">
+          <div class="cap"></div>
+        </div>
+        <div class="slide">
+          <img src="bema22.jpg" alt="Бегимай на прогулке"
+               onerror="this.src='welcome.jpeg'; this.onerror=null;">
+          <div class="cap"></div>
+        </div>
+        <div class="slide">
+          <img src="bema3.jpg" alt="Бегимай с родителями"
+               onerror="this.src='welcome.jpeg'; this.onerror=null;">
+          <div class="cap"></div>
+        </div>
+        <div class="slide">
+          <img src="bema44.jpg" alt="Весёлое фото с друзьями"
+               onerror="this.src='welcome.jpeg'; this.onerror=null;">
+          <div class="cap"></div>
+        </div>
+        <!-- клоны -->
+        <div class="slide"><img src="bema55.jpg"  alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <div class="slide"><img src="bema22.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <div class="slide"><img src="bema3.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+        <div class="slide"><img src="bema44.jpg" alt="" onerror="this.src='welcome.jpeg'; this.onerror=null;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Фото-футер -->
+  <footer class="footer-hero">
+    <img class="footer-img" src="footer.jpeg" alt="" loading="lazy">
+    <div class="panel">
+      <div class="footer-eyebrow">Сиздерди чыдамсыздык менен күтөбүз</div>
+      <div class="footer-title">Бул кечени сиздер менен бөлүшкөнүбүзгө кубанычтабыз</div>
+      <div class="footer-names">Жакшыбек &amp; Салтанат</div>
+    </div>
+    <div class="legal">© <span id="y"></span>. Сүйүү менен, үй-бүлө.</div>
+  </footer>
+
+  <!-- Фоновая музыка -->
+  <audio id="bgm" preload="auto" loop playsinline>
+    <source src="piano.mp3" type="audio/mpeg">
+  </audio>
+  <!-- Тоггл-кнопка -->
+  <button class="bgm-toggle" id="bgmToggle" aria-pressed="false" aria-label="Включить музыку">
+    <span class="icon">♫</span>
+  </button>
+
+<script>
+/* ===== Настройки ===== */
+const SCROLL_SPEED_PX_S = 120;
+const EVENT_YEAR = 2025;                  // если надо другой год — поменяй тут
+const EVENT_MONTH = 9;                    // Октябрь = 9 (0-индексация в JS Date)
+const EVENT_DAY = 3;
+const EVENT_HOUR = 12;                    // Начало в 12:00
+
+/* ===== Хелперы ===== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
+
+/* ===== Скролл кнопка и «продолж    .month{font:700 clamp(20px,5vw,28px) 'Playfair Display',serif; letter-spacing:.08em; text-transform:uppercase; color:#2a2a2a}
     .grid{display:grid; grid-template-columns:repeat(7,minmax(28px,1fr)); gap:12px; max-width:360px; margin:0 auto; justify-items:center}
     .dow,.day{font:600 clamp(16px,4.8vw,20px) 'Playfair Display',serif; color:#2a2a2a}
     .dow{text-transform:uppercase; letter-spacing:.06em; font-size:12px; color:var(--muted)}
@@ -726,6 +1016,7 @@ const runSchedule = (()=> {
 
 </body>
 </html>
+
 
 
 
