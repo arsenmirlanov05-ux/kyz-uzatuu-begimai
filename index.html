@@ -2,7 +2,9 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+
   <title>Begimai — Кыз узатуу</title>
   <meta name="color-scheme" content="light" />
 <!-- Мини-превью для WhatsApp / Telegram / Instagram DM -->
@@ -12,6 +14,8 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
     :root{
       --bg:#ffffff; --fg:#1a1a1a; --muted:#6b6b6b;
       --accent:#7a1e2c; --accent-2:#a02a3d;
@@ -171,8 +175,8 @@
     /* Кнопка музыки – сверху справа */
     .bgm-toggle{
       position:fixed;
-      top:calc(16px + 50px + env(safe-area-inset-top, 0px));
-      right:calc(16px + 25px + env(safe-area-inset-right, 0px));
+      top:  calc(16px + env(safe-area-inset-top, 0px));
+      right:calc(16px + env(safe-area-inset-right, 0px));
       z-index:9999;
       width:56px; height:56px; border-radius:999px;
       display:grid; place-items:center; cursor:pointer;
@@ -196,9 +200,16 @@
       color:#fff; background:linear-gradient(180deg,var(--accent),var(--accent-2));
       box-shadow:0 12px 24px rgba(122,30,44,.25);
       cursor:pointer; z-index:9998;
+       padding-left:  calc(18px + env(safe-area-inset-left, 0px));
+       padding-right: calc(18px + env(safe-area-inset-right, 0px));
     }
     .continue-btn[hidden]{display:none}
     .continue-btn:hover{transform:translateX(-50%) translateY(-1px)}
+    @supports (min-height: 100dvh) {
+  .hero { min-height: 100dvh; }
+  .footer-hero { min-height: 100dvh; }
+}
+
   </style>
 </head>
 <body>
@@ -729,6 +740,7 @@ const runSchedule = (()=> {
 
 </body>
 </html>
+
 
 
 
